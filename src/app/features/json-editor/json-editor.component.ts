@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-json-editor',
@@ -7,9 +7,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class JsonEditorComponent implements OnInit {
 
-  constructor() { }
+  public file: File | null = null;
+  public fileContent: any = '';
+
+  constructor(private host: ElementRef<HTMLInputElement>) { }
 
   ngOnInit(): void {
   }
 
+  public jsonFileUploaded(fileInputEvent: any) {
+
+    fileInputEvent = fileInputEvent as HTMLInputElement;
+
+    if (fileInputEvent && fileInputEvent.target && fileInputEvent.target.files.length > 0)
+      console.log(fileInputEvent.target.files[0]);
+      let file = fileInputEvent.target.files[0];
+      let reader = new FileReader();
+      let self = this;
+      reader.onload = function (e) {
+        // The file's text will be printed here
+        if (e && e.target) {
+          self.fileContent = reader.result;
+          console.warn(self.fileContent)
+        }
+      };
+    reader.readAsText(file); 
+  }
 }

@@ -1,1 +1,10 @@
-<p>json-editor works!</p>
+<div class="tool-window">
+    <div class="input-form">
+        <span>Select JSON file to parse </span>
+        <input #jsonInput hidden="true" type="file" onclick="this.value=null" (change)="jsonFileUploaded($event)" accept=".txt"/>
+        <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse JSON File <span class="material-symbols-outlined">
+            upload_file
+            </span></button>
+    </div>
+    
+</div>

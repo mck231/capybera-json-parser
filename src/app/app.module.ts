@@ -8,13 +8,15 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { JsonEditorComponent } from './features/json-editor/json-editor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialExampleModule } from 'src/material.module';
+import { ToolMenuComponent } from './shared/tool-menu/tool-menu.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    JsonEditorComponent
+    JsonEditorComponent,
+    ToolMenuComponent
   ],
   imports: [
     BrowserModule,
