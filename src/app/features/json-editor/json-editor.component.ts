@@ -22,6 +22,7 @@ export class JsonEditorComponent implements OnInit {
     if (fileInputEvent && fileInputEvent.target && fileInputEvent.target.files.length > 0)
       console.log(fileInputEvent.target.files[0]);
       let file = fileInputEvent.target.files[0];
+      this.file = file;
       let reader = new FileReader();
       let self = this;
       reader.onload = function (e) {
@@ -33,4 +34,8 @@ export class JsonEditorComponent implements OnInit {
       };
     reader.readAsText(file); 
   }
+
+ 
+
+
 }

@@ -9,6 +9,7 @@ import { JsonEditorComponent } from './features/json-editor/json-editor.componen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialExampleModule } from 'src/material.module';
 import { ToolMenuComponent } from './shared/tool-menu/tool-menu.component';
+import { JsonCanvasComponent } from './features/json-canvas/json-canvas.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ToolMenuComponent } from './shared/tool-menu/tool-menu.component';
     HeaderComponent,
     FooterComponent,
     JsonEditorComponent,
-    ToolMenuComponent
+    ToolMenuComponent,
+    JsonCanvasComponent
   ],
   imports: [
     BrowserModule,
