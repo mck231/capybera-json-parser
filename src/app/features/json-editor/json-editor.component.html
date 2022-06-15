@@ -1,5 +1,5 @@
 <div class="tool-window">
-    <div class="input-form" *ngIf="!file">
+    <div class="input-form" *ngIf="!validJson">
         <span>Select JSON file to parse </span>
         <input #jsonInput hidden="true" type="file" onclick="this.value=null" (change)="jsonFileUploaded($event)"
             accept=".txt" />
@@ -9,10 +9,10 @@
             </span></button>
     </div>
     
-    <div *ngIf="file" class="workSpace">
+    <div *ngIf="validJson" class="workSpace">
         {{file?.name}}
         {{fileContent}}
-        <json-canvas [fileContent]="fileContent"></json-canvas>
+        <json-canvas [fileContent]="fileContent" [validJson]="validJson"></json-canvas>
     </div>
 
 </div>

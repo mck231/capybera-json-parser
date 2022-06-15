@@ -10,6 +10,7 @@ import { JsonMapperModel } from 'src/app/shared/models/JsonMapperModel';
 })
 export class JsonCanvasComponent implements OnInit {
   @Input() public fileContent: string = '';
+  @Input() public validJson: boolean = false;
   public jsonModel: Array<JsonMapperModel> = [];
   public levelIndex = 0;
   public groupIndex = 0;
