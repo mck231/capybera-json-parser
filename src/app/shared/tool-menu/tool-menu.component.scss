@@ -10,3 +10,26 @@
     align-items: center;
     justify-content: center;
 }
+.glow-circle{
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: glow 1s infinite;
+    margin-bottom: 5px;
+    margin-right: 5px;
+}
+.verticle{
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;    
+    border: 1px double lavender;
+}
+.green{
+    background-color: green;
+}
+.red{
+    background-color: red;
+}
+h2{
+    margin-bottom: 0;
+}

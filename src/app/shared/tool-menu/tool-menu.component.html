@@ -1,6 +1,10 @@
 <div class="side-nav-width">
     <div class="container">
-        <h2 class="center">Tools</h2>
+        <h1 class="center">Tools</h1>
+    </div>
+    <div class="verticle">
+        <div class="glow-circle" [ngClass]="validJson == true ? 'green' : 'red'"></div>
+        <h2>Valid Json</h2>
     </div>
     <div class="center">
         <button mat-button color="primary" matTooltip="Cast Selected to Object">To Object</button>

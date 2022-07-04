@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ValidjsonService } from '../services/validjson.service';
 
 @Component({
   selector: 'tool-menu',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolMenuComponent implements OnInit {
 
-  constructor() { }
+  constructor(public isValidService: ValidjsonService) { }
+
+  public validJson: boolean = false;
 
   ngOnInit(): void {
-  }
+    this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
 
+  }
+  ngOnDestroy(): void {
+    this.isValidService.isValid.unsubscribe();
+  }
 }

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SVG, extend as SVGextend, Element as SVGElement } from '@svgdotjs/svg.js'
 import '@svgdotjs/svg.draggable.js'
 import { JsonMapperModel } from 'src/app/shared/models/JsonMapperModel';
+import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 
 @Component({
   selector: 'json-canvas',
@@ -22,7 +23,7 @@ export class JsonCanvasComponent implements OnInit {
   public emtpyTile: JsonMapperModel = { cols: 1, Text: ' ', Symbol: true }
   public keySeperator: JsonMapperModel = { cols: 1, Text: ':', Symbol: true }
   public highestNestedValue = 0;
-  constructor() { }
+  constructor(public isValid: ValidjsonService) { }
 
   ngOnInit(): void {
     this.loadCanvas();
