@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, Self } from '@angular/core';
+import { ParserService } from 'src/app/shared/services/parserService/parser.service';
 import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class JsonEditorComponent implements OnInit {
   public fileContent: any = '';
   public validJson: boolean = false;
 
-  constructor(private host: ElementRef<HTMLInputElement>, public isValidService: ValidjsonService) { }
+  constructor(private host: ElementRef<HTMLInputElement>, public isValidService: ValidjsonService, public paserService: ParserService) { }
 
   ngOnInit(): void {
       this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
@@ -36,12 +37,12 @@ export class JsonEditorComponent implements OnInit {
         // The file's text will be printed here
         if (e && e.target) {
           self.fileContent = reader.result;
-          self.isValidService.changeIfValid(self.ValidateJSON(reader.result)); 
+          self.isValidService.changeIfValid(self.ValidateJSON(reader.result));   
+          self.handleFile();        
         }
       };
     reader.readAsText(file); 
-    }
-      
+    }      
   }
     
   public ValidateJSON(str: any): boolean{
@@ -54,7 +55,10 @@ export class JsonEditorComponent implements OnInit {
   return true;
   }
 
- 
+  public handleFile() {
+    this.paserService.fileContent = this.fileContent;
+    this.paserService.parseJson();
+  }
 
 
 }
