@@ -62,8 +62,15 @@ export class JsonEditorComponent implements OnInit {
   }
 
   public userTypedJson() {
-    // need to cast as any or other html element
-    //console.warn(this.inputJson?.nativeElement?.value));    
+    let input = this.inputJson?.nativeElement as HTMLInputElement  
+    let isValid = this.ValidateJSON(input.value);
+    if(isValid){
+      this.fileContent = input.value;
+      this.isValidService.changeIfValid(isValid);
+      this.paserService.fileContent = input.value;
+      this.paserService.parseJson();
+    }
+
   }
 
 
