@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, Self } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, Self, ViewChild } from '@angular/core';
 import { ParserService } from 'src/app/shared/services/parserService/parser.service';
 import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 
@@ -12,6 +12,7 @@ export class JsonEditorComponent implements OnInit {
   public file: File | null = null;
   public fileContent: any = '';
   public validJson: boolean = false;
+  @ViewChild('inputJson', {read: ElementRef}) inputJson: ElementRef<HTMLElement> | undefined;
 
   constructor(private host: ElementRef<HTMLInputElement>, public isValidService: ValidjsonService, public paserService: ParserService) { }
 
@@ -58,6 +59,11 @@ export class JsonEditorComponent implements OnInit {
   public handleFile() {
     this.paserService.fileContent = this.fileContent;
     this.paserService.parseJson();
+  }
+
+  public userTypedJson() {
+    // need to cast as any or other html element
+    //console.warn(this.inputJson?.nativeElement?.value));    
   }
 
 

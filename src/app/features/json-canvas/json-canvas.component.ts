@@ -11,23 +11,34 @@ import { ParserService } from 'src/app/shared/services/parserService/parser.serv
   styleUrls: ['./json-canvas.component.scss']
 })
 export class JsonCanvasComponent implements OnInit {  
-  constructor(public parserService: ParserService) { }
+  constructor(public parserService: ParserService) { 
+    this.json = this.parserService.jsonModel;
+  }
 
-  public json: any;
+  public json: JsonMapperModel[] = [];
   public canvas: Svg = new Svg();
 
   ngOnInit(): void {
     this.loadCanvas();
-    this.json = this.parserService.jsonModel;
-    console.table(this.json);
+    
   }
   public loadCanvas(){
-    this.canvas = SVG().addTo('#canvas').size('1200px', '1200px');
-    this.drawKey()
+    this.canvas = SVG().addTo('#canvas').size('1200px', '980px');
+    this.convertJsonToSVG()
+  }
+
+  public convertJsonToSVG(){    
+    let x = 0;
+    let y = 50
+    for(let el of this.json){
+      if(el && el.Text){
+      this.canvas.text(el.Text).move(x, y).font({ size: 22, family: 'Verdana' });
+      }
+      x = x += 100;
+    }
   }
 
   public drawKey() {
-    var rect = this.canvas.rect(100, 100).fill('#f06').move(20, 20)
     var text = this.canvas.text(function(add) {
       add.tspan('We go ')
       add.tspan('up').fill('#f09').dy(-40)
@@ -38,5 +49,7 @@ export class JsonCanvasComponent implements OnInit {
     
     var textpath = text.path(path).font({ size: 42.5, family: 'Verdana' })
   }
+
+  
    
 }
