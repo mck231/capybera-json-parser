@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialExampleModule } from 'src/material.module';
 import { ToolMenuComponent } from './shared/tool-menu/tool-menu.component';
 import { JsonCanvasComponent } from './features/json-canvas/json-canvas.component';
+import { InputJsonDialog } from './shared/dialogs/input-json-dialog';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { JsonCanvasComponent } from './features/json-canvas/json-canvas.componen
     FooterComponent,
     JsonEditorComponent,
     ToolMenuComponent,
-    JsonCanvasComponent
+    JsonCanvasComponent,
+    InputJsonDialog
   ],
   imports: [
     BrowserModule,

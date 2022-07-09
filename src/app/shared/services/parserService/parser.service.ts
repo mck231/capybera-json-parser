@@ -19,11 +19,21 @@ export class ParserService {
   public fileContent: string = '';
   constructor() { }
 
+  public clearContent() { 
+    this.jsonModel = [];
+    this.fileContent = '';
+    this.levelIndex = 0;
+    this.groupIndex = 0;
+    this.highestIndex = 0;
+    this.highestNestedValue = 0;
+  }
+
   public parseJson() {
     //console.warn(this.fileContent).
     let readyFormatt = JSON.parse(this.fileContent);
     this.startJsonParse(readyFormatt);
   }
+
   private dealWithOjbect(data: any) {
     for (let prop in data) {
       //start by pushing the key to array
@@ -134,9 +144,7 @@ export class ParserService {
         this.jsonModel.push(valueItem);
 
       }
-
     }
-    console.table(this.jsonModel);
     this.whiteSpaceCalculation(this.jsonModel);
   }
 
@@ -153,6 +161,5 @@ export class ParserService {
         index--
       }
     }
-    console.log(highestLevel)
   }
 }
