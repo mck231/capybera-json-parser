@@ -1,14 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { of } from 'rxjs';
 
 import { ToolMenuComponent } from './tool-menu.component';
 
 describe('ToolMenuComponent', () => {
   let component: ToolMenuComponent;
   let fixture: ComponentFixture<ToolMenuComponent>;
+  let dialogSpy: jasmine.Spy;
+  let dialogRefSpyObj = jasmine.createSpyObj({ afterClosed : of({}), close: null });
+  dialogRefSpyObj.componentInstance = { body: '' }; // attach componentInstance to the spy object...
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ToolMenuComponent ]
+      declarations: [ ToolMenuComponent ],
+      imports: [MatDialogModule],
+      providers: [MatDialog]
     })
     .compileComponents();
   });

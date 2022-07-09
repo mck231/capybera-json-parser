@@ -29,7 +29,6 @@ export class ParserService {
   }
 
   public parseJson() {
-    //console.warn(this.fileContent).
     let readyFormatt = JSON.parse(this.fileContent);
     this.startJsonParse(readyFormatt);
   }
