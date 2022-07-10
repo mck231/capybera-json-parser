@@ -1,11 +1,11 @@
 export class JsonMapperModel {
-    Key?: boolean;
+    Key: boolean = false;
     Text?: string;
+    Number?: number;
+    Boolean?: boolean;
+    NullValue?: boolean;
     Array?: 'start' | 'end';
     Object?: 'start' | 'end';
-    color?: string;
-    cols = 1;
+    Color?: string;
     Symbol?: boolean = false;
 }
-
-
