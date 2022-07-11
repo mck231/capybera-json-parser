@@ -19,6 +19,7 @@ describe('ParserService', () => {
     service.parseJson();
     expect(service.jsonModel.length > 0).toBeTruthy();
     expect(service.jsonModel[2].Text).toBe('hi');
+    expect(service.jsonModel[0].Text).toBe('events');
   });
   
   it('should parse nested objects', () => {
@@ -33,12 +34,18 @@ describe('ParserService', () => {
     service.parseJson();
     expect(service.jsonModel.length > 0).toBeTruthy();
     expect(service.jsonModel[3].Number).toEqual(1);
+    expect(service.jsonModel[4].Number).toEqual(2);
   });
 
   it('should try to parse json but fail', () => {
     service.fileContent = notFormatedCorrectlyJson;
     service.parseJson();
     expect(service.jsonModel).toHaveSize(0);
+  });
+  it('should handle complex json', () => {
+    service.fileContent = fakeComplicatedJson;
+    service.parseJson();
+    expect(service.jsonModel.length > 0).toBeTruthy();
   });
 });
 
@@ -59,3 +66,6 @@ const fakeJsonWithArray = `{
 const notFormatedCorrectlyJson = `{
   "events": "hi"
 `
+const fakeComplicatedJson = `{
+  "events": [ {"test": 3}, {"test": "8L"}, {"test": true} ]
+}`;
