@@ -9,17 +9,17 @@ export class ParserService {
   private levelIndex = 0;
   private groupIndex = 0;
   private highestIndex = 0;
-  private arrayStart: JsonMapperModel = { Array: 'start', cols: 1 }
-  private endStart: JsonMapperModel = { Array: 'end', cols: 1 }
-  private objectStart: JsonMapperModel = { Object: 'start', cols: 1 }
-  private objectEnd: JsonMapperModel = { Object: 'end', cols: 1 }
-  private emtpyTile: JsonMapperModel = { cols: 1, Text: ' ', Symbol: true }
-  private keySeperator: JsonMapperModel = { cols: 1, Text: ':', Symbol: true }
+  private arrayStart: JsonMapperModel = { Array: 'start', Key: false }
+  private endStart: JsonMapperModel = { Array: 'end' , Key: false}
+  private objectStart: JsonMapperModel = { Object: 'start' , Key: false}
+  private objectEnd: JsonMapperModel = { Object: 'end' , Key: false}
+  private emtpyTile: JsonMapperModel = {  Text: ' ', Symbol: true , Key: false}
+  private keySeperator: JsonMapperModel = {  Text: ':', Symbol: true , Key: false}
   private highestNestedValue = 0;
   public fileContent: string = '';
   constructor() { }
 
-  public clearContent() { 
+  public clearContent() {
     this.jsonModel = [];
     this.fileContent = '';
     this.levelIndex = 0;
@@ -29,9 +29,13 @@ export class ParserService {
   }
 
   public parseJson() {
-    //console.warn(this.fileContent).
-    let readyFormatt = JSON.parse(this.fileContent);
-    this.startJsonParse(readyFormatt);
+    try {
+      let readyFormatt = JSON.parse(this.fileContent);
+      this.startJsonParse(readyFormatt);
+      console.table(this.jsonModel);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   private dealWithOjbect(data: any) {
@@ -39,8 +43,7 @@ export class ParserService {
       //start by pushing the key to array
       let keyitem: JsonMapperModel = Object();
       keyitem.Key = true;
-      keyitem.Text = prop;
-      keyitem.cols = 1;
+      keyitem.Text = prop;      
       this.jsonModel.push(keyitem);
       this.jsonModel.push(this.keySeperator)
       //let valueitem: JsonMapperModel = Object();
@@ -61,15 +64,12 @@ export class ParserService {
       else {
         let valueItem: JsonMapperModel = Object();
         valueItem.Key = false;
-        valueItem.Text = data[prop];
-        valueItem.cols = 1;
+        this.determineValueType(data[prop], valueItem);
+        //valueItem.Text = data[prop];        
         this.jsonModel.push(valueItem);
         this.jsonModel.push(this.emtpyTile)
-
       }
-
     }
-
   }
 
   private dealWithArray(data: any) {
@@ -93,15 +93,10 @@ export class ParserService {
       else {
         let arrayItem: JsonMapperModel = Object();
         arrayItem.Key = false;
-        arrayItem.Text = itemToBeParsed;
-        arrayItem.cols = 1;
+        //arrayItem.Text = itemToBeParsed;
+        this.determineValueType(itemToBeParsed, arrayItem);
         this.jsonModel.push(arrayItem);
-
       }
-
-      // lastly should be array of values
-
-
     }
   }
 
@@ -110,14 +105,11 @@ export class ParserService {
    * @param data json to parse
    */
   private startJsonParse(data: any) {
-    // do logic if json is just a value
-
     //do something
     for (let type in data) {
       let item: JsonMapperModel = Object();
       item.Key = true;
       item.Text = type;
-      item.cols = 1;
 
       this.jsonModel.push(item);
       this.jsonModel.push(this.keySeperator)
@@ -125,9 +117,9 @@ export class ParserService {
       if (Array.isArray(data[type])) {
         this.jsonModel.push(this.arrayStart);
 
-        let emptTile = Object.assign({}, this.emtpyTile);
-        emptTile.cols = 12;
-        this.jsonModel.push(emptTile)
+        // let emptTile = Object.assign({}, this.emtpyTile);
+        // emptTile.Cols = 12;
+        // this.jsonModel.push(emptTile)
         this.dealWithArray(data[type])
         this.jsonModel.push(this.endStart);
       }
@@ -139,14 +131,34 @@ export class ParserService {
       else {
         let valueItem: JsonMapperModel = Object();
         valueItem.Key = false;
-        valueItem.Text = data[type];
-        valueItem.cols = 1;
+        this.determineValueType(data[type], valueItem);
+        //valueItem.Text = data[type];
         this.jsonModel.push(valueItem);
 
       }
     }
     this.whiteSpaceCalculation(this.jsonModel);
   }
+
+  private determineValueType(value: any, valueItem: JsonMapperModel): void {
+    if (typeof value === 'boolean') {
+      value = value as boolean || undefined;
+      valueItem.Boolean = value;
+    }
+    else if (typeof value === 'string') {
+      value = value as string || undefined;
+      valueItem.Text = value;
+    }
+    else if (typeof value === 'number') {
+      value = value as number || undefined;
+      valueItem.Number = value;
+    }
+    else if (value == null) {
+      valueItem.NullValue = true;
+    }
+  }
+
+
 
   private whiteSpaceCalculation(jsonData: JsonMapperModel[]) {
     let symbolArray = jsonData.filter(x => x.Array == 'start' || x.Array == 'end' || x.Object == 'start' || x.Object == 'end')

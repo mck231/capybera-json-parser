@@ -37,19 +37,4 @@ export class JsonCanvasComponent implements OnInit {
       x = x += 100;
     }
   }
-
-  public drawKey() {
-    var text = this.canvas.text(function(add) {
-      add.tspan('We go ')
-      add.tspan('up').fill('#f09').dy(-40)
-      add.tspan(', then we go down, then up again').dy(40)
-    })
-    
-    var path = 'M 100 200 C 200 100 300 0 400 100 C 500 200 600 300 700 200 C 800 100 900 100 900 100'
-    
-    var textpath = text.path(path).font({ size: 42.5, family: 'Verdana' })
-  }
-
-  
-   
 }
