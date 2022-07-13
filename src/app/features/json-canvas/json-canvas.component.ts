@@ -30,9 +30,13 @@ export class JsonCanvasComponent implements OnInit {
   public convertJsonToSVG(){    
     let x = 0;
     let y = 50
+    console.table(this.json);
     for(let el of this.json){
       if(el && el.Text){
       this.canvas.text(el.Text).move(x, y).font({ size: 22, family: 'Verdana' });
+      }
+      if(el && el.Symbol){
+        
       }
       x = x += 100;
     }

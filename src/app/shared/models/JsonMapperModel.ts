@@ -6,6 +6,7 @@ export class JsonMapperModel {
     NullValue?: boolean;
     Array?: 'start' | 'end';
     Object?: 'start' | 'end';
+    KeyLink?: boolean = false;
     Color?: string;
     Symbol?: boolean = false;
 }
