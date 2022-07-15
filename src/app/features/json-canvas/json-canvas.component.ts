@@ -42,7 +42,9 @@ export class JsonCanvasComponent implements OnInit {
       var text = this.canvas.text(value)
       text.move(20,20).font({ fill: '#000', family: 'Inconsolata' })
       const keyText = this.canvas.text(value);
+      console.warn(keyText.width());
       squareKey.add(keyText);
+      console.warn(keyText.x() + 'y=' + keyText.y());
       
   }
 
