@@ -28,18 +28,16 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public convertJsonToSVG(){    
-    let x = 0;
-    let y = 50;
-    console.table(this.json);
-    for(let el of this.json){
-      if(el && el.Text){
-      this.canvas.rect(100, 50).fill('#fff').stroke('#000');
-      this.canvas.text(el.Text).move(x, y).font({ size: 22, family: 'Verdana' });
+    for(let item of this.json){
+      if(item.Key == true && item.Text){
+          this.addSvgKeyToCanvas(item.Text)
       }
-      if(el && el.Symbol){
-        
-      }
-      x = x += 100;
+      
     }
   }
+
+  public addSvgKeyToCanvas(value: string){
+      
+  }
+
 }
