@@ -37,6 +37,12 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public addSvgKeyToCanvas(value: string){
+      const squareKey = this.canvas.rect(100, 100).fill('#f06').move(10, 10).radius(10);
+      
+      var text = this.canvas.text(value)
+      text.move(20,20).font({ fill: '#000', family: 'Inconsolata' })
+      const keyText = this.canvas.text(value);
+      squareKey.add(keyText);
       
   }
 
