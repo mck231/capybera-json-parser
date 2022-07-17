@@ -40,17 +40,15 @@ export class JsonCanvasComponent implements OnInit {
     // const squareKey = this.canvas.rect(100, 100).fill('#f06').move(10, 10).radius(10);
 
     let text = this.canvas.text(value).id('key1')
-    text.move(20, 20).font({ fill: '#000', family: 'Inconsolata' })
-    const keyText = this.canvas.text(value);
+    text.font({ fill: '#fff', family: 'Inconsolata' }).dy(50).x(50);
 
-    let background = document.getElementById('key1');
+    let background = SVG('#key1');
     if (background) {
-      let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-      console.warn(background.clientHeight + " " + background.clientWidth);
-
-      const squareKey = this.canvas.rect(background.clientHeight, background.clientWidth).fill('#f06').move(10, 10).radius(10);
-      squareKey.add(keyText);
-
+      //let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      const xaxis = background.node.clientWidth
+      const yaxis = background.node.clientHeight
+      const squareKey = this.canvas.rect(+xaxis, +yaxis).fill('#h20').dy(50).x(50);
+      squareKey.after(text);
     }
 
   }
