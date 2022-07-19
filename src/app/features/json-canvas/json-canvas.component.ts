@@ -36,8 +36,23 @@ export class JsonCanvasComponent implements OnInit {
     }
   }
 
-  public addSvgKeyToCanvas(value: string){
-      
+  public addSvgKeyToCanvas(value: string) {
+    // const squareKey = this.canvas.rect(100, 100).fill('#f06').move(10, 10).radius(10);
+
+    let text = this.canvas.text(value).id('key1')
+    text.font({ fill: '#000', family: 'Inconsolata' }).dy(50).x(50);
+
+    let background = SVG('#key1');
+    if (background) {
+      //let h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+      const xaxis = background.node.scrollWidth;
+      const yaxis = background.node.clientHeight
+      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').dy(30).x(40).radius(10).stroke('#000');
+      squareKey.height(yaxis).width(xaxis + 20);
+
+      text.front()
+    }
+
   }
 
 }
