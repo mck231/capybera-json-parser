@@ -35,13 +35,16 @@ export class JsonCanvasComponent implements OnInit {
       if(item.Key == false && item.Text){
         this.addSvgValueToCanvas(item.Text)
       }
+      if(item.KeyLink == true){
+        this.createColonSvgLink()
+      }
       
     }
   }
 
   public addSvgKeyToCanvas(value: string) {
     let text = this.canvas.text(value).id('key1')
-    text.font({ fill: '#000', family: 'Inconsolata' }).y(50).x(50);
+    text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(50);
     let background = SVG('#key1');
     if (background) {
       const xaxis = background.node.clientWidth;
@@ -54,16 +57,25 @@ export class JsonCanvasComponent implements OnInit {
 
   public addSvgValueToCanvas(value: string) {
     let text = this.canvas.text(value).id('value1')
-    text.font({ fill: '#000', family: 'Inconsolata' }).y(50).x(150);
+    text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(200);
     let background = SVG('#value1');
     if (background) {
       const xaxis = background.node.clientWidth;
       const yaxis = background.node.clientHeight
-      const squareValue = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(140).radius(10).stroke('#000');
+      const squareValue = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(190).radius(10).stroke('#000');
       squareValue.height(yaxis).width(xaxis);
 
       text.front()
     }
+  }
+
+  public createColonSvgLink(){
+    let line = this.canvas.line(120, 50, 190, 50)
+    line.stroke({ color: '#000', width: 5, linecap: 'round' })
+
+    // Need to refactor code to use BBox
+    //document.querySelector("#value1").children[0].getBBox()
+
   }
 
 }

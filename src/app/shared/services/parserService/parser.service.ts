@@ -14,7 +14,7 @@ export class ParserService {
   private objectStart: JsonMapperModel = { Object: 'start' , Key: false}
   private objectEnd: JsonMapperModel = { Object: 'end' , Key: false}
   private emtpyTile: JsonMapperModel = {  Text: ' ', Symbol: true , Key: false}
-  private keySeperator: JsonMapperModel = { Symbol: true , Key: false}
+  private keySeperator: JsonMapperModel = { Symbol: true , Key: false, KeyLink: true}
   private highestNestedValue = 0;
   public fileContent: string = '';
   constructor() { }
