@@ -70,8 +70,8 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public createColonSvgLink(){
-    let line = this.canvas.line(120, 50, 190, 50)
-    line.stroke({ color: '#000', width: 5, linecap: 'round' })
+    let line = this.canvas.line(118, 50, 190, 50)
+    line.stroke({ color: '#000', width: 3, linecap: 'round' })
 
     // Need to refactor code to use BBox
     //document.querySelector("#value1").children[0].getBBox()
