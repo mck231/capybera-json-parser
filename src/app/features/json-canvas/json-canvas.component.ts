@@ -65,13 +65,28 @@ export class JsonCanvasComponent implements OnInit {
       const boxSize = background.bbox();
       let xaxis = boxSize.width;
       let yaxis = boxSize.height * 2;
-      const squareValue = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(190).radius(10).stroke('#000');
+      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(30).x(190).radius(10).stroke('#000');
       squareValue.height(yaxis).width(xaxis + 20);
       console.warn(squareValue.bbox())
       text.front()
       let line = SVG('#colon1');
       line.attr('x2', boxSize.x);
     }
+  }
+
+  public addSvgObjectToCanvas() {
+    // let text = this.canvas.text('Hello World').id('key1')
+    // text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(50);
+    // let background = SVG('#key1');
+    // if (background) {
+    //   const boxSize = background.bbox();
+    //   const xaxis = boxSize.width;
+    //   const yaxis = boxSize.height * 2;
+    //   const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(40).radius(10).stroke('#000');
+    //   squareKey.height(yaxis).width(xaxis + 20);
+    //   console.warn(squareKey.bbox())
+    //   text.front()
+    // }
   }
 
   public createColonSvgLink(){
