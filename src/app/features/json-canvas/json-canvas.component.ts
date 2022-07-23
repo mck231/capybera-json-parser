@@ -47,10 +47,12 @@ export class JsonCanvasComponent implements OnInit {
     text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(50);
     let background = SVG('#key1');
     if (background) {
-      const xaxis = background.node.clientWidth;
-      const yaxis = background.node.clientHeight
+      const boxSize = background.bbox();
+      const xaxis = boxSize.width;
+      const yaxis = boxSize.height * 2;
       const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(40).radius(10).stroke('#000');
       squareKey.height(yaxis).width(xaxis + 20);
+      console.warn(squareKey.bbox())
       text.front()
     }
   }
@@ -60,19 +62,23 @@ export class JsonCanvasComponent implements OnInit {
     text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(200);
     let background = SVG('#value1');
     if (background) {
-      const xaxis = background.node.clientWidth;
-      const yaxis = background.node.clientHeight
+      const boxSize = background.bbox();
+      let xaxis = boxSize.width;
+      let yaxis = boxSize.height * 2;
       const squareValue = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(190).radius(10).stroke('#000');
-      squareValue.height(yaxis).width(xaxis);
-
+      squareValue.height(yaxis).width(xaxis + 20);
+      console.warn(squareValue.bbox())
       text.front()
+      let line = SVG('#colon1');
+      line.attr('x2', boxSize.x);
     }
   }
 
   public createColonSvgLink(){
-    let line = this.canvas.line(118, 50, 190, 50)
+    let kSVG = SVG('#key1');
+    let line = this.canvas.line(kSVG.bbox().x2, 50, 0, 50).id('colon1');
     line.stroke({ color: '#000', width: 3, linecap: 'round' })
-
+    line.back();
     // Need to refactor code to use BBox
     //document.querySelector("#value1").children[0].getBBox()
 
