@@ -23,7 +23,7 @@ export class JsonCanvasComponent implements OnInit {
     
   }
   public loadCanvas(){
-    this.canvas = SVG().addTo('#canvas').size('1200px', '980px');
+    this.canvas = SVG().addTo('#canvas').size('1200px', '800px');
     this.convertJsonToSVG()
   }
 
@@ -52,7 +52,6 @@ export class JsonCanvasComponent implements OnInit {
       const yaxis = boxSize.height * 2;
       const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(40).radius(10).stroke('#000');
       squareKey.height(yaxis).width(xaxis + 20);
-      console.warn(squareKey.bbox())
       text.front()
     }
   }
@@ -67,7 +66,6 @@ export class JsonCanvasComponent implements OnInit {
       let yaxis = boxSize.height * 2;
       const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(30).x(190).radius(10).stroke('#000');
       squareValue.height(yaxis).width(xaxis + 20);
-      console.warn(squareValue.bbox())
       text.front()
       let line = SVG('#colon1');
       line.attr('x2', boxSize.x);
@@ -91,7 +89,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public createColonSvgLink(){
     let kSVG = SVG('#key1');
-    let line = this.canvas.line(kSVG.bbox().x2, 50, 0, 50).id('colon1');
+    let line = this.canvas.line(kSVG.bbox().x2, 46, 0, 46).id('colon1');
     line.stroke({ color: '#000', width: 3, linecap: 'round' })
     line.back();
     // Need to refactor code to use BBox
