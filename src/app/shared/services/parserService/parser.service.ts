@@ -57,7 +57,7 @@ export class ParserService {
         this.jsonModel.push(this.objectStart)
         this.dealWithOjbect(data[prop])
         this.jsonModel.push(this.objectEnd)
-        this.jsonModel.push(this.emtpyTile)
+        //this.jsonModel.push(this.emtpyTile)
 
       }
       // lastly should be a value type
@@ -67,7 +67,7 @@ export class ParserService {
         this.determineValueType(data[prop], valueItem);
         //valueItem.Text = data[prop];        
         this.jsonModel.push(valueItem);
-        this.jsonModel.push(this.emtpyTile)
+        //this.jsonModel.push(this.emtpyTile)
       }
     }
   }
