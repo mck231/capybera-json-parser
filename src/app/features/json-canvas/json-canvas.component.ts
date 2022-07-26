@@ -17,6 +17,10 @@ export class JsonCanvasComponent implements OnInit {
 
   public json: JsonMapperModel[] = [];
   public canvas: Svg = new Svg();
+  // tring to get these to work now 
+  // to allow cascade of svgs on canvas
+  public xAxis: number = 0;
+  public yAxis: number = 0;
 
   ngOnInit(): void {
     this.loadCanvas();
@@ -45,8 +49,6 @@ export class JsonCanvasComponent implements OnInit {
       if (item.Object == 'end') {
         this.createSymbolSvgLink('}');
       }
-
-
     }
   }
 
