@@ -37,10 +37,11 @@ export class JsonCanvasComponent implements OnInit {
   public convertJsonToSVG() {
     let startOjbectIndent = false;
     let arrayIndex = 0;
+    let objectXaxisTracker = [];
     for (let item of this.json) {
       if (item.Key == true && item.Text) {
         if(startOjbectIndent == true){
-        this.yAxis = this.yAxis + 100;
+        this.yAxis = this.yAxis + 50;
         this.xAxis = this.xAxis - 25;
         this.addSvgKeyToCanvas(item.Text, arrayIndex)
         }
@@ -57,12 +58,13 @@ export class JsonCanvasComponent implements OnInit {
 
       if (item.Object == 'start') {
         this.xAxis = this.xAxis + 100;
+        objectXaxisTracker.push(this.xAxis);
         this.createSymbolSvgLink('{', arrayIndex);
       }
       if (item.Object == 'end') {
-        this.yAxis = this.yAxis + 100;
-        this.xAxis = this.xAxis - 50;
-
+        this.yAxis = this.yAxis + 50;
+        let x =  objectXaxisTracker.pop();
+        this.xAxis = x ? x : this.xAxis;
         this.createSymbolSvgLink('}', arrayIndex);
       }
       startOjbectIndent = true;
