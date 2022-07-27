@@ -19,8 +19,11 @@ export class JsonCanvasComponent implements OnInit {
   public canvas: Svg = new Svg();
   // tring to get these to work now 
   // to allow cascade of svgs on canvas
-  public xAxis: number = 0;
-  public yAxis: number = 0;
+
+  /** this will mark the horizontal axis in regards to the canvas */
+  public xAxis: number = 50;
+  /** this will mark the verticle axis in regards to the canvas */
+  public yAxis: number = 40;
 
   ngOnInit(): void {
     this.loadCanvas();
@@ -32,72 +35,92 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public convertJsonToSVG() {
+    let startOjbectIndent = false;
+    let arrayIndex = 0;
     for (let item of this.json) {
       if (item.Key == true && item.Text) {
-        this.addSvgKeyToCanvas(item.Text)
+        if(startOjbectIndent == true){
+        this.yAxis = this.yAxis + 100;
+        this.xAxis = this.xAxis - 25;
+        this.addSvgKeyToCanvas(item.Text, arrayIndex)
+        }
+        this.addSvgKeyToCanvas(item.Text, arrayIndex)
+       
       }
       if (item.Key == false && item.Text) {
-        this.addSvgValueToCanvas(item.Text)
+        this.xAxis = this.xAxis + 100;
+        this.addSvgValueToCanvas(item.Text, arrayIndex)
       }
       if (item.KeyLink == true) {
-        this.createColonSvgLink()
+        this.createColonSvgLink(arrayIndex)
       }
 
       if (item.Object == 'start') {
-        this.createSymbolSvgLink('{');
+        this.xAxis = this.xAxis + 100;
+        this.createSymbolSvgLink('{', arrayIndex);
       }
       if (item.Object == 'end') {
-        this.createSymbolSvgLink('}');
+        this.yAxis = this.yAxis + 100;
+        this.xAxis = this.xAxis - 50;
+
+        this.createSymbolSvgLink('}', arrayIndex);
       }
+      startOjbectIndent = true;
+      arrayIndex++;
     }
   }
 
-  public addSvgKeyToCanvas(value: string) {
-    let text = this.canvas.text(value).id('key1')
-    text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(50);
-    let background = SVG('#key1');
+  public addSvgKeyToCanvas(value: string, int: number) {
+    let text = this.canvas.text(value).id('key'+ int)
+    text.font({ fill: '#000', family: 'Inconsolata' }).y(this.yAxis).x(this.xAxis);
+    let background = SVG('#key'+ int);
     if (background) {
       const boxSize = background.bbox();
       const xaxis = boxSize.width;
       const yaxis = boxSize.height * 2;
-      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(30).x(40).radius(10).stroke('#000');
+      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000');
       squareKey.height(yaxis).width(xaxis + 20);
       text.front()
     }
   }
 
-  public addSvgValueToCanvas(value: string) {
-    let text = this.canvas.text(value).id('value1')
-    text.font({ fill: '#000', family: 'Inconsolata' }).y(40).x(200);
-    let background = SVG('#value1');
+  public addSvgValueToCanvas(value: string, int: number) {
+    let text = this.canvas.text(value).id('value' + int)
+    text.font({ fill: '#000', family: 'Inconsolata' }).y(this.yAxis).x(this.xAxis);
+    let background = SVG('#value' + int);
     if (background) {
       const boxSize = background.bbox();
       let xaxis = boxSize.width;
       let yaxis = boxSize.height * 2;
-      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(30).x(190).radius(10).stroke('#000');
+      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000');
       squareValue.height(yaxis).width(xaxis + 20);
       text.front()
-      let line = SVG('#colon1');
-      line.attr('x2', boxSize.x);
+      let line = SVG('#colon' + (int - 1));
+      if (line) {
+        line.attr('x2', boxSize.x);
+      }      
     }
   }
 
 
-  public createSymbolSvgLink(symbol: string) {
-    let text = this.canvas.text(symbol).id('symbol1' )
-    text.font({ fill: '#fff', family: 'Inconsolata', size: 32}).y(40).x(200);
-    let background = SVG('#symbol1' );
+  public createSymbolSvgLink(symbol: string, int: number) {
+    let text = this.canvas.text(symbol).id('symbol' + int)
+    text.font({ fill: '#fff', family: 'Inconsolata', size: 28}).y(this.yAxis - 15).x(this.xAxis);
+    let background = SVG('#symbol' + int);
     if (background) {
       const boxSize = background.bbox();
-      const circleSymbol = this.canvas.circle(50, 50).fill('#000').y(35).x(180)
+      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis ).cx(this.xAxis + 5);
       text.front();
-
+      let line = SVG('#colon' + (int - 1));
+      if (line) {
+        line.attr('x2', boxSize.x);
+      }      
     }
   }
 
-  public createColonSvgLink() {
-    let kSVG = SVG('#key1');
-    let line = this.canvas.line(kSVG.bbox().x2, 46, kSVG.bbox().x2, 46).id('colon1');
+  public createColonSvgLink(int: number) {
+    let kSVG = SVG('#key' + (int - 1));
+    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis+5, kSVG.bbox().x2, this.yAxis+5).id('colon' + int);
     line.stroke({ color: '#000', width: 3, linecap: 'round' })
     line.back();
     // Need to refactor code to use BBox
