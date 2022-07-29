@@ -80,9 +80,14 @@ export class JsonCanvasComponent implements OnInit {
       const boxSize = background.bbox();
       const xaxis = boxSize.width;
       const yaxis = boxSize.height * 2;
-      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000');
+      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000').id('rectKey' + int);
       squareKey.height(yaxis).width(xaxis + 20);
       text.front()
+
+      let keyGroup = this.canvas.group().id('keyGroup' + int);
+      keyGroup.add(squareKey);
+      keyGroup.add(text);
+
     }
   }
 
@@ -94,9 +99,14 @@ export class JsonCanvasComponent implements OnInit {
       const boxSize = background.bbox();
       let xaxis = boxSize.width;
       let yaxis = boxSize.height * 2;
-      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000');
+      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000').id('rectValue' + int);
       squareValue.height(yaxis).width(xaxis + 20);
       text.front()
+
+      let valueGroup = this.canvas.group().id('valueGroup' + int);
+      valueGroup.add(squareValue);
+      valueGroup.add(text);
+
       let line = SVG('#colon' + (int - 1));
       if (line) {
         line.attr('x2', boxSize.x);
@@ -111,13 +121,32 @@ export class JsonCanvasComponent implements OnInit {
     let background = SVG('#symbol' + int);
     if (background) {
       const boxSize = background.bbox();
-      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis ).cx(this.xAxis + 5);
+      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis ).cx(this.xAxis + 5).id('circle' + int);
       text.front();
       let line = SVG('#colon' + (int - 1));
       if (line) {
         line.attr('x2', boxSize.x);
       }      
+
+      let symbolGroup = this.canvas.group().id('symbolGroup' + int);
+      symbolGroup.add(circleSymbol);
+      symbolGroup.add(text);
+
+    let path = this.canvas.path('M0 0 A50 50 0 0 1 50 50 A50 50 0 0 0 100 50')
+
+    path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
+
+    path.marker('start', boxSize.x, boxSize.y)
+    path.marker('mid', 10, 10, function(add) {
+      add.rect(5, 10).cx(5).fill('#000')
+    })
+    path.marker('end', 20, 20, function(add) {
+      add.circle(6).center(4, 5)
+      add.circle(6).center(4, 15)
+      add.circle(6).center(12, 10)    
+    })
     }
+    
   }
 
   public createColonSvgLink(int: number) {
