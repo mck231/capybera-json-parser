@@ -66,6 +66,7 @@ export class JsonCanvasComponent implements OnInit {
         let x =  objectXaxisTracker.pop();
         this.xAxis = x ? x : this.xAxis;
         this.createSymbolSvgLink('}', arrayIndex);
+        this.createPathForEndingObject(arrayIndex);
       }
       startOjbectIndent = true;
       arrayIndex++;
@@ -130,23 +131,8 @@ export class JsonCanvasComponent implements OnInit {
 
       let symbolGroup = this.canvas.group().id('symbolGroup' + int);
       symbolGroup.add(circleSymbol);
-      symbolGroup.add(text);
-
-    let path = this.canvas.path('M0 0 A50 50 0 0 1 50 50 A50 50 0 0 0 100 50')
-
-    path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
-
-    path.marker('start', boxSize.x, boxSize.y)
-    path.marker('mid', 10, 10, function(add) {
-      add.rect(5, 10).cx(5).fill('#000')
-    })
-    path.marker('end', 20, 20, function(add) {
-      add.circle(6).center(4, 5)
-      add.circle(6).center(4, 15)
-      add.circle(6).center(12, 10)    
-    })
-    }
-    
+      symbolGroup.add(text);   
+    }    
   }
 
   public createColonSvgLink(int: number) {
@@ -156,6 +142,19 @@ export class JsonCanvasComponent implements OnInit {
     line.back();
     // Need to refactor code to use BBox
     //document.querySelector("#value1").children[0].getBBox()
+
+  }
+
+  public createPathForEndingObject(int: number) { 
+    let path = this.canvas.path(
+      `
+      M10 10 
+      L50 50
+      L50 50 
+      `
+      ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
+
+    //path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
 
   }
 
