@@ -17,8 +17,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public json: JsonMapperModel[] = [];
   public canvas: Svg = new Svg();
-  // tring to get these to work now 
-  // to allow cascade of svgs on canvas
+
 
   /** this will mark the horizontal axis in regards to the canvas */
   public xAxis: number = 50;
@@ -42,7 +41,7 @@ export class JsonCanvasComponent implements OnInit {
       if (item.Key == true && item.Text) {
         if(startOjbectIndent == true){
         this.yAxis = this.yAxis + 50;
-        this.xAxis = this.xAxis - 25;
+        this.xAxis = this.xAxis + 50;
         this.addSvgKeyToCanvas(item.Text, arrayIndex)
         }
         this.addSvgKeyToCanvas(item.Text, arrayIndex)
@@ -146,13 +145,13 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public createPathForEndingObject(int: number) { 
-    let path = this.canvas.path(
-      `
-      M10 10 
-      L50 50
-      L50 50 
-      `
-      ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
+    // let path = this.canvas.path(
+    //   `
+    //   M10 10 
+    //   L50 50
+    //   L50 50 
+    //   `
+    //   ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
 
     //path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
 
