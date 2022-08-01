@@ -17,7 +17,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public json: JsonMapperModel[] = [];
   public canvas: Svg = new Svg();
-
+  public heightAndWidthForValueTracker: Array<{ x: number, y: number }> = [];
 
   /** this will mark the horizontal axis in regards to the canvas */
   public xAxis: number = 50;
@@ -61,11 +61,11 @@ export class JsonCanvasComponent implements OnInit {
         this.createSymbolSvgLink('{', arrayIndex);
       }
       if (item.Object == 'end') {
-        this.yAxis = this.yAxis + 50;
+        //this.yAxis = this.yAxis + 50;
         let x =  objectXaxisTracker.pop();
-        this.xAxis = x ? x : this.xAxis;
+        this.xAxis = this.heightAndWidthForValueTracker[0].x
         this.createSymbolSvgLink('}', arrayIndex);
-        this.createPathForEndingObject(arrayIndex);
+        this.createPathForWrappingObject(arrayIndex);
       }
       startOjbectIndent = true;
       arrayIndex++;
@@ -106,7 +106,7 @@ export class JsonCanvasComponent implements OnInit {
       let valueGroup = this.canvas.group().id('valueGroup' + int);
       valueGroup.add(squareValue);
       valueGroup.add(text);
-
+      this.heightAndWidthForValueTracker.push({ x: boxSize.x2 + 50, y: boxSize.y });
       let line = SVG('#colon' + (int - 1));
       if (line) {
         line.attr('x2', boxSize.x);
@@ -121,12 +121,12 @@ export class JsonCanvasComponent implements OnInit {
     let background = SVG('#symbol' + int);
     if (background) {
       const boxSize = background.bbox();
-      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis ).cx(this.xAxis + 5).id('circle' + int);
+      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis ).cx(this.xAxis + 5 ).id('circle' + int);
       text.front();
-      let line = SVG('#colon' + (int - 1));
-      if (line) {
-        line.attr('x2', boxSize.x);
-      }      
+      // let line = SVG('#colon' + (int - 1));
+      // if (line) {
+      //   line.attr('x2', boxSize.x);
+      // }      
 
       let symbolGroup = this.canvas.group().id('symbolGroup' + int);
       symbolGroup.add(circleSymbol);
@@ -144,7 +144,7 @@ export class JsonCanvasComponent implements OnInit {
 
   }
 
-  public createPathForEndingObject(int: number) { 
+  public createPathForWrappingObject(int: number) { 
     // let path = this.canvas.path(
     //   `
     //   M10 10 
