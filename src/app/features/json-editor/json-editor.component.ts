@@ -1,4 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, Self, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { ParserService } from 'src/app/shared/services/parserService/parser.service';
 import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 
@@ -13,15 +14,18 @@ export class JsonEditorComponent implements OnInit {
   public fileContent: any = '';
   public validJson: boolean = false;
   @ViewChild('inputJson', {read: ElementRef}) inputJson: ElementRef<HTMLElement> | undefined;
+  public sub: Subscription | undefined;
 
   constructor(private host: ElementRef<HTMLInputElement>, public isValidService: ValidjsonService, public paserService: ParserService) { }
 
   ngOnInit(): void {
-      this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
+      this.sub = this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
   }
 
   ngOnDestroy(): void {
-    this.isValidService.isValid.unsubscribe();
+    if(this.sub){
+    this.sub.unsubscribe();
+  }
   }
 
   public jsonFileUploaded(fileInputEvent: any) {

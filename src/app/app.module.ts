@@ -11,6 +11,7 @@ import { MaterialExampleModule } from 'src/material.module';
 import { ToolMenuComponent } from './shared/tool-menu/tool-menu.component';
 import { JsonCanvasComponent } from './features/json-canvas/json-canvas.component';
 import { InputJsonDialog } from './shared/dialogs/input-json-dialog';
+import { HomeComponent } from './features/home/home.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { InputJsonDialog } from './shared/dialogs/input-json-dialog';
     JsonEditorComponent,
     ToolMenuComponent,
     JsonCanvasComponent,
-    InputJsonDialog
+    InputJsonDialog,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

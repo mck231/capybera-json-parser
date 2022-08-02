@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ValidjsonService } from '../services/validjson.service';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InputJsonDialog } from '../dialogs/input-json-dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tool-menu',
@@ -13,13 +14,16 @@ export class ToolMenuComponent implements OnInit {
   constructor(public isValidService: ValidjsonService, public dialog: MatDialog) { }
 
   public validJson: boolean = false;
+  public sub: Subscription | undefined;
 
   ngOnInit(): void {
-    this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
+    this.sub = this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
 
   }
   ngOnDestroy(): void {
-    this.isValidService.isValid.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   public enterNewJson() {
