@@ -5,29 +5,35 @@
     <mat-sidenav-content>
         <div class="tool-window">
             <div class="input-form" *ngIf="!validJson">
-                <span>Select JSON file to parse </span>
-                <input #jsonInput hidden="true" type="file" onclick="this.value=null"
-                    (change)="jsonFileUploaded($event)" accept=".txt" />
-                <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse JSON File <span
-                        class="material-symbols-outlined">
-                        upload_file
-                    </span></button>
-                <div>Or paste into here:</div>
                 <div>
+                    <h2 class="tool-title">
+                        Use one of the following options upload Json.
+                    </h2>
+                </div>
+                <span>Select JSON file to parse </span>
+                <div>
+                    <input #jsonInput hidden="true" type="file" onclick="this.value=null"
+                        (change)="jsonFileUploaded($event)" accept=".txt" />
+                    <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse JSON File <span
+                            class="material-symbols-outlined">
+                            upload_file
+                        </span></button>
+                </div>
+                <div>Or paste into here:</div>
+                <div class="type-input">
                     <mat-form-field class="example-full-width" appearance="fill">
                         <mat-label>Paste JSON here</mat-label>
                         <textarea matInput placeholder="Ex. { events : hi }" #inputJson></textarea>
                     </mat-form-field>
-                    <button mat-flat-button color="primary" (click)="userTypedJson()"> Parse Typed Text </button>
+                    <div>
+                        <button mat-flat-button color="primary" (click)="userTypedJson()"> Parse Typed Text </button>
+                    </div>
                 </div>
-
             </div>
-
             <div *ngIf="validJson" class="workSpace">
                 <h2> {{file?.name}} </h2>
                 <json-canvas></json-canvas>
             </div>
-
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
