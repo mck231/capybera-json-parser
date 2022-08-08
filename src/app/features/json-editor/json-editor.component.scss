@@ -8,7 +8,7 @@
     padding-left: 15px;
 }
 .mat-flat-button{
-    line-height: 65px;
+    line-height: 40px;
 }
 .options{
     width: 300px;
@@ -31,4 +31,9 @@
     //coloumn 
     flex-direction: column;
     justify-content: end;
+}
+.text-area-input{
+    height: 150px;    
+    background-color: #f8f8f8;
+    
 }
