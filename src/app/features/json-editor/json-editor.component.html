@@ -3,8 +3,8 @@
         <tool-menu></tool-menu>
     </mat-sidenav>
     <mat-sidenav-content>
-        <div class="tool-window">
-            <div class="input-form" *ngIf="!validJson">
+        <div class="tool-window" *ngIf="!validJson">
+            <div class="input-form" >
                 <div>
                     <h2 class="tool-title">
                         Use one of the following options upload Json.
@@ -29,11 +29,11 @@
                         <button mat-flat-button color="primary" (click)="userTypedJson()"> Parse Typed Text </button>
                     </div>
                 </div>
-            </div>
-            <div *ngIf="validJson" class="workSpace">
-                <h2> {{file?.name}} </h2>
-                <json-canvas></json-canvas>
-            </div>
+            </div>           
+        </div>
+        <div *ngIf="validJson" class="workSpace">
+            <h2> {{file?.name}} </h2>
+            <json-canvas></json-canvas>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
