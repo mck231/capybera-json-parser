@@ -1,33 +1,41 @@
 <mat-sidenav-container class="example-container">
-    <mat-sidenav mode="side" position="end" opened>
+    <mat-sidenav mode="side" position="end" opened class="side-nav">
         <tool-menu></tool-menu>
     </mat-sidenav>
     <mat-sidenav-content>
-        <div class="tool-window">
-            <div class="input-form" *ngIf="!validJson">
-                <span>Select JSON file to parse </span>
-                <input #jsonInput hidden="true" type="file" onclick="this.value=null"
-                    (change)="jsonFileUploaded($event)" accept=".txt" />
-                <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse JSON File <span
-                        class="material-symbols-outlined">
-                        upload_file
-                    </span></button>
-                <div>Or paste into here:</div>
+        <div class="tool-window" *ngIf="!validJson">
+            <div class="input-form">
                 <div>
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Paste JSON here</mat-label>
-                        <textarea matInput placeholder="Ex. { events : hi }" #inputJson></textarea>
-                    </mat-form-field>
-                    <button mat-flat-button color="primary" (click)="userTypedJson()"> Parse Typed Text </button>
+                    <h2 class="tool-title">
+                        Use one of the following options upload Json data.
+                    </h2>
                 </div>
-
+                <div class="upload-file">
+                    <span>Select JSON file to parse </span>
+                    <div>
+                        <input #jsonInput hidden="true" type="file" onclick="this.value=null"
+                            (change)="jsonFileUploaded($event)" accept=".txt" />
+                        <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse File <span
+                                class="material-symbols-outlined">
+                                upload_file
+                            </span></button>
+                    </div>
+                </div>
+                <div class="type-input">
+                    <span>Or paste into here:</span>
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <textarea class="text-area-input" matInput placeholder="{{exampleString}}"
+                            #inputJson></textarea>
+                    </mat-form-field>
+                    <div>
+                        <button mat-flat-button color="primary" (click)="userTypedJson()"> Submit Typed Text </button>
+                    </div>
+                </div>
             </div>
-
-            <div *ngIf="validJson" class="workSpace">
-                <h2> {{file?.name}} </h2>
-                <json-canvas></json-canvas>
-            </div>
-
+        </div>
+        <div *ngIf="validJson" class="workSpace">
+            <h2> {{file?.name}} </h2>
+            <json-canvas></json-canvas>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

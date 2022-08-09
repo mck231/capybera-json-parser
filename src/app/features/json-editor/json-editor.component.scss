@@ -1,12 +1,17 @@
 .tool-window{
     height: 95vh;
+    display: flex;
+    justify-content: flex-end;
+    background-image: linear-gradient(121.55deg,#673ab7 17.34%,linen 113.19%);;
+
 }
 .input-form{
     padding: 10px;
     padding-left: 15px;
+    font-size: 15px;
 }
 .mat-flat-button{
-    line-height: 65px;
+    line-height: 40px;
 }
 .options{
     width: 300px;
@@ -20,3 +25,30 @@
 .example-full-width {
     width: 75%;
   }
+.tool-title{
+    font-size: 40px;
+    text-align: center;
+    max-width: 700px;
+    margin-bottom: 30px;
+    font-family: "Tiro Gurmukhi rev=2";
+}
+.type-input{
+    display: flex;
+    //coloumn 
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.text-area-input{
+    height: 150px;    
+    background-color: #f8f8f8;   
+}
+.upload-file{
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-right: 15px;
+}
+.side-nav{
+    background-color: rgb(219, 241, 241);
+}
