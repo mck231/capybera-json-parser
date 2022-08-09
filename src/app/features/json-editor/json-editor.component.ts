@@ -15,6 +15,7 @@ export class JsonEditorComponent implements OnInit {
   public validJson: boolean = false;
   @ViewChild('inputJson', {read: ElementRef}) inputJson: ElementRef<HTMLElement> | undefined;
   public sub: Subscription | undefined;
+  public exampleString = `Ex. { "events" : "hi" }`
 
   constructor(private host: ElementRef<HTMLInputElement>, public isValidService: ValidjsonService, public paserService: ParserService) { }
 
