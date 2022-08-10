@@ -26,6 +26,13 @@ export class JsonCanvasComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCanvas();
+  }
+  public realoadCavnas() {
+    this.canvas.clear();
+    this.xAxis = 50;
+    this.yAxis = 40;
+    this.heightAndWidthForValueTracker = [];
+    this.convertJsonToSVG()
 
   }
   public loadCanvas() {
