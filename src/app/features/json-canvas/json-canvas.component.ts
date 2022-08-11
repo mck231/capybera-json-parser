@@ -43,7 +43,7 @@ export class JsonCanvasComponent implements OnInit {
   public convertJsonToSVG() {
     let startOjbectIndent = false;
     let arrayIndex = 0;
-    let objectXaxisTracker = [];
+    let objectXaxisTracker: number[] = [];
     for (let item of this.json) {
       if (item.Key == true && item.Text) {
         if(startOjbectIndent == true){
@@ -51,28 +51,26 @@ export class JsonCanvasComponent implements OnInit {
         this.xAxis = this.xAxis + 50;
         this.addSvgKeyToCanvas(item.Text, arrayIndex)
         }
-        this.addSvgKeyToCanvas(item.Text, arrayIndex)
-       
+        this.addSvgKeyToCanvas(item.Text, arrayIndex)        
       }
       if (item.Key == false && item.Text) {
         this.xAxis = this.xAxis + 100;
-        this.addSvgValueToCanvas(item.Text, arrayIndex)
+        this.addSvgValueToCanvas(item.Text, arrayIndex)        
       }
       if (item.KeyLink == true) {
-        this.createColonSvgLink(arrayIndex)
+        this.createColonSvgLink(arrayIndex)        
       }
-
       if (item.Object == 'start') {
         this.xAxis = this.xAxis + 100;
         objectXaxisTracker.push(this.xAxis);
-        this.createSymbolSvgLink('{', arrayIndex);
+        this.createSymbolSvgLink('{', arrayIndex);        
       }
       if (item.Object == 'end') {
         //this.yAxis = this.yAxis + 50;
         let x =  objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
         this.createSymbolSvgLink('}', arrayIndex);
-        this.createPathForWrappingObject(arrayIndex);
+        this.createPathForWrappingObject(arrayIndex);        
       }
       startOjbectIndent = true;
       arrayIndex++;
@@ -143,7 +141,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public createColonSvgLink(int: number) {
     let kSVG = SVG('#key' + (int - 1));
-    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis+5, kSVG.bbox().x2, this.yAxis+5).id('colon' + int);
+    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis+5, kSVG.bbox().x2 + 50, this.yAxis+5).id('colon' + int);
     line.stroke({ color: '#000', width: 3, linecap: 'round' })
     line.back();
     // Need to refactor code to use BBox
@@ -152,15 +150,19 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public createPathForWrappingObject(int: number) { 
-    // let path = this.canvas.path(
-    //   `
-    //   M10 10 
-    //   L50 50
-    //   L50 50 
-    //   `
-    //   ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
 
-    //path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
+    let path = this.canvas.path(
+      `
+      M 90 90 
+      H 180 
+      V 180 
+      H 10 
+      L 90 90
+      Z
+      `
+      ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
+
+    path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
 
   }
 
