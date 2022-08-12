@@ -23,6 +23,7 @@ export class JsonCanvasComponent implements OnInit {
   public xAxis: number = 50;
   /** this will mark the verticle axis in regards to the canvas */
   public yAxis: number = 40;
+  public objectXaxisTracker: [{x:number, index: number}] = [{x:0, index:0}];
 
   ngOnInit(): void {
     this.loadCanvas();
@@ -43,7 +44,6 @@ export class JsonCanvasComponent implements OnInit {
   public convertJsonToSVG() {
     let startOjbectIndent = false;
     let arrayIndex = 0;
-    let objectXaxisTracker: number[] = [];
     for (let item of this.json) {
       if (item.Key == true && item.Text) {
         if(startOjbectIndent == true){
@@ -62,15 +62,17 @@ export class JsonCanvasComponent implements OnInit {
       }
       if (item.Object == 'start') {
         this.xAxis = this.xAxis + 100;
-        objectXaxisTracker.push(this.xAxis);
+        if(this.xAxis && arrayIndex){
+          let objStarAndEnd = { x: this.xAxis, index: arrayIndex };
+          this.objectXaxisTracker.push(objStarAndEnd);
+        }        
         this.createSymbolSvgLink('{', arrayIndex);        
       }
       if (item.Object == 'end') {
         //this.yAxis = this.yAxis + 50;
-        let x =  objectXaxisTracker.pop();
+        let x =  this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
         this.createSymbolSvgLink('}', arrayIndex);
-        this.createPathForWrappingObject(arrayIndex);        
       }
       startOjbectIndent = true;
       arrayIndex++;
@@ -136,6 +138,8 @@ export class JsonCanvasComponent implements OnInit {
       let symbolGroup = this.canvas.group().id('symbolGroup' + int);
       symbolGroup.add(circleSymbol);
       symbolGroup.add(text);   
+
+      this.createPathForWrappingObject(boxSize.x2);        
     }    
   }
 
@@ -152,6 +156,7 @@ export class JsonCanvasComponent implements OnInit {
   public createPathForWrappingObject(int: number) { 
     // for future reference
     // https://www.w3.org/TR/SVG/paths.html
+    
     let path = this.canvas.path(
       `
       M 180 180 
