@@ -150,14 +150,15 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public createPathForWrappingObject(int: number) { 
-
+    // for future reference
+    // https://www.w3.org/TR/SVG/paths.html
     let path = this.canvas.path(
       `
-      M 10 10 
+      M 180 180 
       H 360 
-      V 180 
-      H 10 
-      L 10 10
+      V 270 
+      H 180 
+      L 180 180
       Z
       `
       ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
