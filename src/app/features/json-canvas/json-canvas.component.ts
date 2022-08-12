@@ -153,11 +153,11 @@ export class JsonCanvasComponent implements OnInit {
 
     let path = this.canvas.path(
       `
-      M 90 90 
-      H 180 
+      M 10 10 
+      H 360 
       V 180 
       H 10 
-      L 90 90
+      L 10 10
       Z
       `
       ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
