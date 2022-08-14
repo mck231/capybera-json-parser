@@ -23,7 +23,7 @@ export class JsonCanvasComponent implements OnInit {
   public xAxis: number = 50;
   /** this will mark the verticle axis in regards to the canvas */
   public yAxis: number = 40;
-  public objectXaxisTracker: [{x:number, index: number}] = [{x:0, index:0}];
+  public objectXaxisTracker: [{x:number, y:number, index: number}] = [{x:0, y:0, index:0}];
 
   ngOnInit(): void {
     this.loadCanvas();
@@ -61,12 +61,12 @@ export class JsonCanvasComponent implements OnInit {
         this.createColonSvgLink(arrayIndex)        
       }
       if (item.Object == 'start') {
-        this.xAxis = this.xAxis + 100;
+        this.xAxis = this.xAxis + 100;      
+        this.createSymbolSvgLink('{', arrayIndex);
         if(this.xAxis && arrayIndex){
-          let objStarAndEnd = { x: this.xAxis, index: arrayIndex };
+          let objStarAndEnd = { x: this.xAxis, y:this.yAxis, index: arrayIndex };
           this.objectXaxisTracker.push(objStarAndEnd);
         }        
-        this.createSymbolSvgLink('{', arrayIndex);        
       }
       if (item.Object == 'end') {
         //this.yAxis = this.yAxis + 50;
