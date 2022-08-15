@@ -23,7 +23,8 @@ export class JsonCanvasComponent implements OnInit {
   public xAxis: number = 50;
   /** this will mark the verticle axis in regards to the canvas */
   public yAxis: number = 40;
-  public objectXaxisTracker: [{x:number, y:number, index: number}] = [{x:0, y:0, index:0}];
+  //initialise array to track the start and end of objects
+  public objectXaxisTracker: Array<{ x: number, y: number, x2: number, y2: number, index: number }> = new Array<{ x: number, y: number, x2: number, y2: number, index: number }>();
 
   ngOnInit(): void {
     this.loadCanvas();
@@ -46,31 +47,32 @@ export class JsonCanvasComponent implements OnInit {
     let arrayIndex = 0;
     for (let item of this.json) {
       if (item.Key == true && item.Text) {
-        if(startOjbectIndent == true){
-        this.yAxis = this.yAxis + 50;
-        this.xAxis = this.xAxis + 50;
-        this.addSvgKeyToCanvas(item.Text, arrayIndex)
+        if (startOjbectIndent == true) {
+          this.yAxis = this.yAxis + 50;
+          this.xAxis = this.xAxis + 50;
+          this.addSvgKeyToCanvas(item.Text, arrayIndex)
         }
-        this.addSvgKeyToCanvas(item.Text, arrayIndex)        
+        this.addSvgKeyToCanvas(item.Text, arrayIndex)
       }
       if (item.Key == false && item.Text) {
         this.xAxis = this.xAxis + 100;
-        this.addSvgValueToCanvas(item.Text, arrayIndex)        
+        this.addSvgValueToCanvas(item.Text, arrayIndex)
       }
       if (item.KeyLink == true) {
-        this.createColonSvgLink(arrayIndex)        
+        this.createColonSvgLink(arrayIndex)
       }
       if (item.Object == 'start') {
-        this.xAxis = this.xAxis + 100;      
+        this.xAxis = this.xAxis + 100;
         this.createSymbolSvgLink('{', arrayIndex);
-        if(this.xAxis && arrayIndex){
-          let objStarAndEnd = { x: this.xAxis, y:this.yAxis, index: arrayIndex };
-          this.objectXaxisTracker.push(objStarAndEnd);
-        }        
+        if (this.xAxis && arrayIndex) {
+          let objStartAndEnd = { x: this.xAxis, y: this.yAxis, x2: 0, y2: 0, index: arrayIndex };
+          this.objectXaxisTracker.push(objStartAndEnd);
+        }
       }
       if (item.Object == 'end') {
         //this.yAxis = this.yAxis + 50;
-        let x =  this.objectXaxisTracker.pop();
+        console.table(this.objectXaxisTracker)
+        //let x = this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
         this.createSymbolSvgLink('}', arrayIndex);
       }
@@ -80,14 +82,14 @@ export class JsonCanvasComponent implements OnInit {
   }
 
   public addSvgKeyToCanvas(value: string, int: number) {
-    let text = this.canvas.text(value).id('key'+ int)
+    let text = this.canvas.text(value).id('key' + int)
     text.font({ fill: '#000', family: 'Inconsolata' }).y(this.yAxis).x(this.xAxis);
-    let background = SVG('#key'+ int);
+    let background = SVG('#key' + int);
     if (background) {
       const boxSize = background.bbox();
       const xaxis = boxSize.width;
       const yaxis = boxSize.height * 2;
-      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000').id('rectKey' + int);
+      const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(this.yAxis - 7).x(this.xAxis - 7).radius(10).stroke('#000').id('rectKey' + int);
       squareKey.height(yaxis).width(xaxis + 20);
       text.front()
 
@@ -106,7 +108,7 @@ export class JsonCanvasComponent implements OnInit {
       const boxSize = background.bbox();
       let xaxis = boxSize.width;
       let yaxis = boxSize.height * 2;
-      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(this.yAxis-7).x(this.xAxis-7).radius(10).stroke('#000').id('rectValue' + int);
+      const squareValue = this.canvas.rect(10, 10).fill('#dee8f2').y(this.yAxis - 7).x(this.xAxis - 7).radius(10).stroke('#000').id('rectValue' + int);
       squareValue.height(yaxis).width(xaxis + 20);
       text.front()
 
@@ -117,18 +119,18 @@ export class JsonCanvasComponent implements OnInit {
       let line = SVG('#colon' + (int - 1));
       if (line) {
         line.attr('x2', boxSize.x);
-      }      
+      }
     }
   }
 
 
   public createSymbolSvgLink(symbol: string, int: number) {
     let text = this.canvas.text(symbol).id('symbol' + int)
-    text.font({ fill: '#fff', family: 'Inconsolata', size: 28}).y(this.yAxis - 15).x(this.xAxis);
+    text.font({ fill: '#fff', family: 'Inconsolata', size: 28 }).y(this.yAxis - 15).x(this.xAxis);
     let background = SVG('#symbol' + int);
     if (background) {
       const boxSize = background.bbox();
-      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis ).cx(this.xAxis + 5 ).id('circle' + int);
+      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis).cx(this.xAxis + 5).id('circle' + int);
       text.front();
       // let line = SVG('#colon' + (int - 1));
       // if (line) {
@@ -137,15 +139,15 @@ export class JsonCanvasComponent implements OnInit {
 
       let symbolGroup = this.canvas.group().id('symbolGroup' + int);
       symbolGroup.add(circleSymbol);
-      symbolGroup.add(text);   
+      symbolGroup.add(text);
 
-      this.createPathForWrappingObject(boxSize.x2);        
-    }    
+      this.createPathForWrappingObject(boxSize.x2);
+    }
   }
 
   public createColonSvgLink(int: number) {
     let kSVG = SVG('#key' + (int - 1));
-    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis+5, kSVG.bbox().x2 + 50, this.yAxis+5).id('colon' + int);
+    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis + 5, kSVG.bbox().x2 + 50, this.yAxis + 5).id('colon' + int);
     line.stroke({ color: '#000', width: 3, linecap: 'round' })
     line.back();
     // Need to refactor code to use BBox
@@ -153,10 +155,10 @@ export class JsonCanvasComponent implements OnInit {
 
   }
 
-  public createPathForWrappingObject(int: number) { 
+  public createPathForWrappingObject(int: number) {
     // for future reference
     // https://www.w3.org/TR/SVG/paths.html
-    
+
     let path = this.canvas.path(
       `
       M 180 180 
@@ -166,10 +168,6 @@ export class JsonCanvasComponent implements OnInit {
       L 180 180
       Z
       `
-      ).fill('none').stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
-
-    path.fill('none').move(20, 20).stroke({ width: 1, color: '#ccc' })
-
+    ).stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
   }
-
 }
