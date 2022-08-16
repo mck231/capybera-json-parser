@@ -71,18 +71,42 @@ export class JsonCanvasComponent implements OnInit {
       }
       if (item.Object == 'end') {
         //this.yAxis = this.yAxis + 50;
-        console.table(this.objectXaxisTracker)
-        //let x = this.objectXaxisTracker.pop();
+        //console.table(this.objectXaxisTracker)
+
+        let x = this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
+        let highXaxis = this.extractHighestXaxisOfValueInObject();
+        let highYaxis = this.extractHighestYaxisOfValueInObject();
         this.createSymbolSvgLink('}', arrayIndex);
+        if (x) {
+          arrayIndex++;
+          this.createPathForWrappingObject(arrayIndex, x);
+        }
+
+
       }
       startOjbectIndent = true;
       arrayIndex++;
     }
   }
 
+  public extractHighestXaxisOfValueInObject() {
+    //query canvas for values between start and end index
+    // search for dom all values that start with vlaue
+    let values = SVG('.value');
+    return values.bbox().x2;
+  }
+  public extractHighestYaxisOfValueInObject() {
+    //query canvas for values between start and end index
+    // search for dom all values that start with vlaue
+    let values = this.canvas.find('.key');
+    console.table(values)
+    return values
+  }
+
   public addSvgKeyToCanvas(value: string, int: number) {
     let text = this.canvas.text(value).id('key' + int)
+    text.node.setAttribute('class', 'key');
     text.font({ fill: '#000', family: 'Inconsolata' }).y(this.yAxis).x(this.xAxis);
     let background = SVG('#key' + int);
     if (background) {
@@ -102,6 +126,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public addSvgValueToCanvas(value: string, int: number) {
     let text = this.canvas.text(value).id('value' + int)
+    text.node.setAttribute('class', 'value');
     text.font({ fill: '#000', family: 'Inconsolata' }).y(this.yAxis).x(this.xAxis);
     let background = SVG('#value' + int);
     if (background) {
@@ -140,8 +165,6 @@ export class JsonCanvasComponent implements OnInit {
       let symbolGroup = this.canvas.group().id('symbolGroup' + int);
       symbolGroup.add(circleSymbol);
       symbolGroup.add(text);
-
-      this.createPathForWrappingObject(boxSize.x2);
     }
   }
 
@@ -155,19 +178,26 @@ export class JsonCanvasComponent implements OnInit {
 
   }
 
-  public createPathForWrappingObject(int: number) {
+  public createPathForWrappingObject(int: number, pathData: { x: number, y: number, x2: number, y2: number, index: number }) {
     // for future reference
-    // https://www.w3.org/TR/SVG/paths.html
-
+    // https://www.w3.org/TR/SVG/paths.html   
+    console.warn(`
+    M ${pathData.x} ${pathData.y} 
+    H ${pathData.x2 + pathData.x} 
+    V ${pathData.y2 + pathData.y} 
+    H ${pathData.x2 + pathData.x} 
+    L ${pathData.x} ${pathData.y}
+    Z
+    `)
     let path = this.canvas.path(
       `
-      M 180 180 
-      H 360 
-      V 270 
-      H 180 
-      L 180 180
+      M ${pathData.x} ${pathData.y} 
+      H ${pathData.y2 + pathData.y} 
+      V ${pathData.x2 + pathData.x} 
+      H ${pathData.y2 + pathData.y} 
+      L ${pathData.x} ${pathData.y}
       Z
       `
-    ).stroke({ color: '#000', width: 3, linecap: 'round' }).id('path' + int);
+    ).fill({ color: '#D2B48C' }).id('path' + int).opacity(0.3);
   }
 }
