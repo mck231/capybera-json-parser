@@ -192,11 +192,11 @@ export class JsonCanvasComponent implements OnInit {
     let path = this.canvas.path(
       `
       M ${pathData.x} ${pathData.y} 
-      H ${pathData.y2 + pathData.y} 
-      V ${pathData.x2 + pathData.x} 
-      H ${pathData.y2 + pathData.y} 
-      L ${pathData.x} ${pathData.y}
-      Z
+      h ${pathData.y2 + pathData.y} 
+      v ${pathData.x2 + pathData.x} 
+      g ${pathData.y2 + pathData.y} 
+      l ${pathData.x} ${pathData.y}
+      z
       `
     ).fill({ color: '#D2B48C' }).id('path' + int).opacity(0.3);
   }
