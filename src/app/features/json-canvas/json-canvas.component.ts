@@ -24,7 +24,7 @@ export class JsonCanvasComponent implements OnInit {
   /** this will mark the verticle axis in regards to the canvas */
   public yAxis: number = 40;
   //initialise array to track the start and end of objects
-  public objectXaxisTracker: Array<{ x: number, y: number, x2: number, y2: number, index: number }> = new Array<{ x: number, y: number, x2: number, y2: number, index: number }>();
+  public objectXaxisTracker: Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }> = new Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }>();
 
   ngOnInit(): void {
     this.loadCanvas();
@@ -54,53 +54,63 @@ export class JsonCanvasComponent implements OnInit {
         }
         this.addSvgKeyToCanvas(item.Text, arrayIndex)
       }
-      if (item.Key == false && item.Text) {
+      else if (item.Key == false && item.Text) {
         this.xAxis = this.xAxis + 100;
         this.addSvgValueToCanvas(item.Text, arrayIndex)
       }
-      if (item.KeyLink == true) {
+      else if (item.KeyLink == true) {
         this.createColonSvgLink(arrayIndex)
       }
-      if (item.Object == 'start') {
+      else if (item.Object == 'start') {
         this.xAxis = this.xAxis + 100;
         this.createSymbolSvgLink('{', arrayIndex);
         if (this.xAxis && arrayIndex) {
-          let objStartAndEnd = { x: this.xAxis, y: this.yAxis, x2: 0, y2: 0, index: arrayIndex };
+          let objStartAndEnd = { x: this.xAxis, y: this.yAxis, x2: 0, y2: 0, startIndex: arrayIndex, endIndex: 0 };
           this.objectXaxisTracker.push(objStartAndEnd);
         }
       }
-      if (item.Object == 'end') {
+      else if (item.Object == 'end') {
         //this.yAxis = this.yAxis + 50;
         //console.table(this.objectXaxisTracker)
 
         let x = this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
-        let highXaxis = this.extractHighestXaxisOfValueInObject();
-        let highYaxis = this.extractHighestYaxisOfValueInObject();
         this.createSymbolSvgLink('}', arrayIndex);
         if (x) {
+          x.endIndex = arrayIndex;
+          // let highXaxis = this.extractHighestXaxisOfValueInObject(x.startIndex, x.endIndex);
+          // let highYaxis = this.extractHighestYaxisOfValueInObject(x.startIndex, x.endIndex);
+          let val = SVG('#value' + (arrayIndex - 1));
+          if (val) {
+            console.warn(val)
+            let valBbox = val.bbox()
+            x.x2 = valBbox.x2
+            x.y2 = valBbox.y2
+          }
           arrayIndex++;
           this.createPathForWrappingObject(arrayIndex, x);
         }
-
-
       }
       startOjbectIndent = true;
       arrayIndex++;
     }
   }
 
-  public extractHighestXaxisOfValueInObject() {
+  public extractHighestXaxisOfValueInObject(lowerBound: number, upperBound: number) {
     //query canvas for values between start and end index
-    // search for dom all values that start with vlaue
+    // search for dom all values that start with vlaue    
     let values = SVG('.value');
+    // for(let val of values){
+
+    // }
+    //console.warn(values)
     return values.bbox().x2;
   }
-  public extractHighestYaxisOfValueInObject() {
+  public extractHighestYaxisOfValueInObject(lowerBound: number, upperBound: number) {
     //query canvas for values between start and end index
     // search for dom all values that start with vlaue
     let values = this.canvas.find('.key');
-    console.table(values)
+    //console.table(values)
     return values
   }
 
@@ -154,7 +164,7 @@ export class JsonCanvasComponent implements OnInit {
     text.font({ fill: '#fff', family: 'Inconsolata', size: 28 }).y(this.yAxis - 15).x(this.xAxis);
     let background = SVG('#symbol' + int);
     if (background) {
-      const boxSize = background.bbox();
+      //const boxSize = background.bbox();
       const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis).cx(this.xAxis + 5).id('circle' + int);
       text.front();
       // let line = SVG('#colon' + (int - 1));
@@ -178,25 +188,22 @@ export class JsonCanvasComponent implements OnInit {
 
   }
 
-  public createPathForWrappingObject(int: number, pathData: { x: number, y: number, x2: number, y2: number, index: number }) {
+  public createPathForWrappingObject(int: number, pathData: { x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }) {
     // for future reference
     // https://www.w3.org/TR/SVG/paths.html   
-    console.warn(`
-    M ${pathData.x} ${pathData.y} 
-    H ${pathData.x2 + pathData.x} 
-    V ${pathData.y2 + pathData.y} 
-    H ${pathData.x2 + pathData.x} 
-    L ${pathData.x} ${pathData.y}
-    Z
-    `)
+
+  //   console.warn(`
+  //   ${pathData.x} ${pathData.y} 
+  //  ${pathData.x2} ${pathData.y2} 
+    
+  //   `)
     let path = this.canvas.path(
       `
       M ${pathData.x} ${pathData.y} 
-      h ${pathData.y2 + pathData.y} 
-      v ${pathData.x2 + pathData.x} 
-      g ${pathData.y2 + pathData.y} 
-      l ${pathData.x} ${pathData.y}
-      z
+      H ${pathData.x2 + 50} 
+      V ${pathData.y2 + 50} 
+      H ${pathData.x} 
+      Z
       `
     ).fill({ color: '#D2B48C' }).id('path' + int).opacity(0.3);
   }
