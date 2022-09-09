@@ -75,6 +75,7 @@ export class JsonCanvasComponent implements OnInit {
 
         let x = this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
+        console.warn(this.xAxis)
         this.createSymbolSvgLink('}', arrayIndex);
         if (x) {
           x.endIndex = arrayIndex;
@@ -82,10 +83,19 @@ export class JsonCanvasComponent implements OnInit {
           // let highYaxis = this.extractHighestYaxisOfValueInObject(x.startIndex, x.endIndex);
           let val = SVG('#value' + (arrayIndex - 1));
           if (val) {
-            console.warn(val)
+            //console.warn(val)
             let valBbox = val.bbox()
             x.x2 = valBbox.x2
             x.y2 = valBbox.y2
+          }
+          if(!val) {
+            // found object 
+            let previousObject = SVG('#path' + (arrayIndex - 1));
+            x.x2 = previousObject.bbox().x2;
+            x.y2 = previousObject.bbox().y2;
+            console.warn(this.heightAndWidthForValueTracker[0].x)
+            this.heightAndWidthForValueTracker[0].x = previousObject.bbox().x2;
+
           }
           arrayIndex++;
           this.createPathForWrappingObject(arrayIndex, x);
@@ -190,13 +200,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public createPathForWrappingObject(int: number, pathData: { x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }) {
     // for future reference
-    // https://www.w3.org/TR/SVG/paths.html   
-
-  //   console.warn(`
-  //   ${pathData.x} ${pathData.y} 
-  //  ${pathData.x2} ${pathData.y2} 
-    
-  //   `)
+    // https://www.w3.org/TR/SVG/paths.html
     let path = this.canvas.path(
       `
       M ${pathData.x} ${pathData.y} 
@@ -206,5 +210,6 @@ export class JsonCanvasComponent implements OnInit {
       Z
       `
     ).fill({ color: '#D2B48C' }).id('path' + int).opacity(0.3);
+    path.back();
   }
 }
