@@ -32,7 +32,7 @@ export class ParserService {
     try {
       let readyFormatt = JSON.parse(this.fileContent);
       this.startJsonParse(readyFormatt);
-      console.table(this.jsonModel);
+      //console.table(this.jsonModel);
     } catch (error) {
       console.log(error);
     }
