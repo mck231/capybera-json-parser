@@ -75,26 +75,35 @@ export class JsonCanvasComponent implements OnInit {
 
         let x = this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
-        console.warn(this.xAxis)
+        //console.warn(this.xAxis)
         this.createSymbolSvgLink('}', arrayIndex);
         if (x) {
+
+          // move down complimentary symbol group
+
+          let complimentarySymbolGroup = SVG('#symbolGroup' + x.startIndex);
+          complimentarySymbolGroup.y(this.yAxis - 15)
+          
           x.endIndex = arrayIndex;
-          // let highXaxis = this.extractHighestXaxisOfValueInObject(x.startIndex, x.endIndex);
-          // let highYaxis = this.extractHighestYaxisOfValueInObject(x.startIndex, x.endIndex);
+          
           let val = SVG('#value' + (arrayIndex - 1));
           if (val) {
-            //console.warn(val)
             let valBbox = val.bbox()
             x.x2 = valBbox.x2
             x.y2 = valBbox.y2
           }
           if(!val) {
-            // found object 
+            // found path for wrapping object
             let previousObject = SVG('#path' + (arrayIndex - 1));
             x.x2 = previousObject.bbox().x2;
             x.y2 = previousObject.bbox().y2;
-            console.warn(this.heightAndWidthForValueTracker[0].x)
-            this.heightAndWidthForValueTracker[0].x = previousObject.bbox().x2;
+            
+            let previousSymbol = SVG('#symbolGroup' + arrayIndex);
+            previousSymbol.x(previousObject.bbox().x2 + 30)
+
+            
+            //previousSymbol.x = 
+            //previousObject.x
 
           }
           arrayIndex++;
@@ -190,7 +199,7 @@ export class JsonCanvasComponent implements OnInit {
 
   public createColonSvgLink(int: number) {
     let kSVG = SVG('#key' + (int - 1));
-    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis + 5, kSVG.bbox().x2 + 50, this.yAxis + 5).id('colon' + int);
+    let line = this.canvas.line(kSVG.bbox().x2, this.yAxis + 5, kSVG.bbox().x2 + 70, this.yAxis + 5).id('colon' + int);
     line.stroke({ color: '#000', width: 3, linecap: 'round' })
     line.back();
     // Need to refactor code to use BBox
