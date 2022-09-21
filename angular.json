@@ -114,5 +114,7 @@
       }
     }
   },
-  "defaultProject": "capybera-json-parser"
+  "cli": {
+    "analytics": "3e6924da-de71-4798-b2b8-794518a9d839"
+  }
 }
