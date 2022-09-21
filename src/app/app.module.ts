@@ -12,6 +12,7 @@ import { ToolMenuComponent } from './shared/tool-menu/tool-menu.component';
 import { JsonCanvasComponent } from './features/json-canvas/json-canvas.component';
 import { InputJsonDialog } from './shared/dialogs/input-json-dialog';
 import { HomeComponent } from './features/home/home.component';
+import { PreviewJsonDialog } from './shared/dialogs/json-preview-dialog';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HomeComponent } from './features/home/home.component';
     ToolMenuComponent,
     JsonCanvasComponent,
     InputJsonDialog,
+    PreviewJsonDialog,
     HomeComponent
   ],
   imports: [
