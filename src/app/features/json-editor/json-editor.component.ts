@@ -75,8 +75,16 @@ export class JsonEditorComponent implements OnInit {
       this.paserService.fileContent = input.value;
       this.paserService.parseJson();
     }
-
   }
 
-
+  public noDataCanvas() {
+    let emptyJSON = `{"key":"value"}`;
+    let isValid = this.ValidateJSON(emptyJSON)
+    if(isValid){
+      this.fileContent = emptyJSON;
+      this.isValidService.changeIfValid(isValid);
+      this.paserService.fileContent = emptyJSON;
+      this.paserService.parseJson();
+    }
+  }
 }
