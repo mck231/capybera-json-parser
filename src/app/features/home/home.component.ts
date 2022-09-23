@@ -11,16 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class HomeComponent implements OnInit {
 
   destroyed = new Subject<void>();
-  currentScreenSize: string = '';
 
-  // Create a map to display breakpoint names for demonstration purposes.
-  displayNameMap = new Map([
-    [Breakpoints.XSmall, 'XSmall'],
-    [Breakpoints.Small, 'Small'],
-    [Breakpoints.Medium, 'Medium'],
-    [Breakpoints.Large, 'Large'],
-    [Breakpoints.XLarge, 'XLarge'],
-  ]);
 
   constructor(private router: Router, breakpointObserver: BreakpointObserver) {
     breakpointObserver
@@ -35,7 +26,13 @@ export class HomeComponent implements OnInit {
       .subscribe(result => {
         for (const query of Object.keys(result.breakpoints)) {
           if (result.breakpoints[query]) {
-            this.currentScreenSize = this.displayNameMap.get(query) ?? 'Unknown';
+            console.warn(result.breakpoints[query])
+            console.warn(query)
+            console.warn(Breakpoints.XSmall)
+            console.warn(result.breakpoints)
+            // if(result.breakpoints[query] == Breakpoints.XSmall ) {
+
+            // }
           }
         }
       });
