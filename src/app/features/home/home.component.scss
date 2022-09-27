@@ -1,27 +1,26 @@
-.main-content{
+.main-content {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
     margin-right: 8%;
 }
-// .home{
-//     background-image: linear-gradient(121.55deg,#673ab7 17.34%,linen 113.19%);;
-//     height: 95vh;
-// }
-.button-list{
+
+.button-list {
     margin: 10px;
 }
-.button-summary{
+
+.button-summary {
     display: flex;
     margin-top: 60px;
     max-width: 668px;
 }
 
-
+// Mobile View
 @media only screen and (max-width: 600px) {
     .home {
-        background-image: linear-gradient(121.55deg,#673ab7 17.34%,linen 113.19%);
+        background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
     }
+
     .title {
         font-size: 40px;
         font-family: "Tiro Gurmukhi rev=2";
@@ -29,22 +28,27 @@
         text-align: end;
         margin-top: 20px;
     }
-    .main-content-text{
+
+    .main-content-text {
         font-size: 16px;
         max-width: 330px;
         line-height: 30px;
     }
+
     .button-summary p {
         max-width: 200px;
         line-height: 325x;
 
     }
-  }
-  @media only screen and (min-width: 600px) {
+}
+
+// bigger screens
+@media only screen and (min-width: 600px) {
     .home {
-      background-image: linear-gradient(121.55deg,#673ab7 17.34%,linen 113.19%);
-      height: 95vh;
+        background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
+        height: 95vh;
     }
+
     .title {
         font-size: 48px;
         max-width: 868px;
@@ -53,12 +57,14 @@
         margin-bottom: 60px;
         text-align: end;
     }
-    .main-content-text{
+
+    .main-content-text {
         font-size: 16px;
         max-width: 668px;
         line-height: 25px;
     }
+
     .button-summary p {
         max-width: 338px;
     }
-  }
+}

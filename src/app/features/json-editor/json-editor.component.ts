@@ -1,5 +1,7 @@
-import { Component, ElementRef, HostListener, OnInit, Self, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, Self, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { ParserService } from 'src/app/shared/services/parserService/parser.service';
 import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 
@@ -8,32 +10,34 @@ import { ValidjsonService } from 'src/app/shared/services/validjson.service';
   templateUrl: './json-editor.component.html',
   styleUrls: ['./json-editor.component.scss']
 })
-export class JsonEditorComponent implements OnInit {
+export class JsonEditorComponent implements OnInit, OnDestroy {
 
   public file: File | null = null;
   public fileContent: any = '';
   public validJson: boolean = false;
-  @ViewChild('inputJson', {read: ElementRef}) inputJson: ElementRef<HTMLElement> | undefined;
+  @ViewChild('inputJson', { read: ElementRef }) inputJson: ElementRef<HTMLElement> | undefined;
   public sub: Subscription | undefined;
   public exampleString = `Ex. { "events" : "hi" }`
 
-  constructor(private host: ElementRef<HTMLInputElement>, public isValidService: ValidjsonService, public paserService: ParserService) { }
+  constructor(private host: ElementRef<HTMLInputElement>,
+    public isValidService: ValidjsonService,
+    public paserService: ParserService) { }
 
   ngOnInit(): void {
-      this.sub = this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
+    this.sub = this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
   }
 
   ngOnDestroy(): void {
-    if(this.sub){
-    this.sub.unsubscribe();
-  }
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 
   public jsonFileUploaded(fileInputEvent: any) {
 
     fileInputEvent = fileInputEvent as HTMLInputElement;
 
-    if (fileInputEvent && fileInputEvent.target && fileInputEvent.target.files.length > 0){      
+    if (fileInputEvent && fileInputEvent.target && fileInputEvent.target.files.length > 0) {
       let file = fileInputEvent.target.files[0];
 
       this.file = file;
@@ -43,22 +47,22 @@ export class JsonEditorComponent implements OnInit {
         // The file's text will be printed here
         if (e && e.target) {
           self.fileContent = reader.result;
-          self.isValidService.changeIfValid(self.ValidateJSON(reader.result));   
-          self.handleFile();        
+          self.isValidService.changeIfValid(self.ValidateJSON(reader.result));
+          self.handleFile();
         }
       };
-    reader.readAsText(file); 
-    }      
+      reader.readAsText(file);
+    }
   }
-    
-  public ValidateJSON(str: any): boolean{
+
+  public ValidateJSON(str: any): boolean {
     try {
       JSON.parse(str);
-  } catch (e) {
+    } catch (e) {
       this.fileContent = '';
       return false;
-  }
-  return true;
+    }
+    return true;
   }
 
   public handleFile() {
@@ -67,9 +71,9 @@ export class JsonEditorComponent implements OnInit {
   }
 
   public userTypedJson() {
-    let input = this.inputJson?.nativeElement as HTMLInputElement  
+    let input = this.inputJson?.nativeElement as HTMLInputElement
     let isValid = this.ValidateJSON(input.value);
-    if(isValid){
+    if (isValid) {
       this.fileContent = input.value;
       this.isValidService.changeIfValid(isValid);
       this.paserService.fileContent = input.value;
@@ -80,7 +84,7 @@ export class JsonEditorComponent implements OnInit {
   public noDataCanvas() {
     let emptyJSON = `{"key":"value"}`;
     let isValid = this.ValidateJSON(emptyJSON)
-    if(isValid){
+    if (isValid) {
       this.fileContent = emptyJSON;
       this.isValidService.changeIfValid(isValid);
       this.paserService.fileContent = emptyJSON;

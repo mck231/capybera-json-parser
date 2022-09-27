@@ -1,18 +1,41 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SVG, extend as SVGextend, Element as SVGElement, Svg } from '@svgdotjs/svg.js'
 import '@svgdotjs/svg.draggable.js'
 import { JsonMapperModel } from 'src/app/shared/models/JsonMapperModel';
 import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 import { ParserService } from 'src/app/shared/services/parserService/parser.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Subject, takeUntil } from 'rxjs';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'json-canvas',
   templateUrl: './json-canvas.component.html',
   styleUrls: ['./json-canvas.component.scss']
 })
-export class JsonCanvasComponent implements OnInit {
-  constructor(public parserService: ParserService) {
+export class JsonCanvasComponent implements OnInit, OnDestroy {
+  destroyed = new Subject<void>();
+  public isMobile = false;
+  public isShowing: boolean = false;
+
+
+  constructor(public parserService: ParserService, public breakpointObserver: BreakpointObserver) {
     this.json = this.parserService.jsonModel;
+    breakpointObserver
+      .observe([
+        Breakpoints.XSmall,
+        Breakpoints.Small
+      ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe(result => {
+        for (const query of Object.keys(result.breakpoints)) {
+          if (result.matches) {
+           this.isMobile = true;
+           this.isShowing = false;
+          }
+          else{this.isShowing = true;}
+        }
+      });
   }
 
   public json: JsonMapperModel[] = [];
@@ -29,6 +52,13 @@ export class JsonCanvasComponent implements OnInit {
   ngOnInit(): void {
     this.loadCanvas();
   }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();  
+  }
+
+  
   public realoadCavnas() {
     this.canvas.clear();
     this.xAxis = 50;
