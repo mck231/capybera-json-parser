@@ -52,3 +52,10 @@
     margin-right: 15px;
 }
 
+
+// Mobile View
+@media only screen and (max-width: 600px) {
+    .tool-title{
+        margin-left: 60px;
+    }
+}

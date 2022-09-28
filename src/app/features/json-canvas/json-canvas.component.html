@@ -3,6 +3,7 @@
         <tool-menu></tool-menu>
     </mat-sidenav>
     <mat-sidenav-content>
+        <icon-home-button></icon-home-button>
         <div class="float">
             <button mat-fab color="primary" mat-button (click)="drawer.toggle()" class="material-symbols-outlined">
                 <span *ngIf="drawer._animationState == 'void'; else content" class="material-symbols-outlined icon-margin">
@@ -15,7 +16,9 @@
                 </ng-template>
             </button>
         </div>
-        <button mat-flat-button color="primary" (click)="realoadCavnas()"> start over func </button>
+        <div class="redo-button">
+            <button mat-flat-button color="primary" (click)="realoadCavnas()"> redo </button>
+        </div>
         <div id="canvas" class="canvas"></div>
     </mat-sidenav-content>
 </mat-sidenav-container>

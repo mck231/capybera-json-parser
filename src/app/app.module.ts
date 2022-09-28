@@ -13,6 +13,7 @@ import { JsonCanvasComponent } from './features/json-canvas/json-canvas.componen
 import { InputJsonDialog } from './shared/dialogs/input-json-dialog';
 import { HomeComponent } from './features/home/home.component';
 import { PreviewJsonDialog } from './shared/dialogs/json-preview-dialog';
+import { IconHomeButtonComponent } from './shared/common/icon-home-button/icon-home-button.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { PreviewJsonDialog } from './shared/dialogs/json-preview-dialog';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialExampleModule
+    MaterialExampleModule,
+    IconHomeButtonComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
