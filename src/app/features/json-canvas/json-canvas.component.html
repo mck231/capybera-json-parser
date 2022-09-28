@@ -1,4 +1,4 @@
-<mat-sidenav-container class="example-container">
+<mat-sidenav-container class="example-container" >
     <mat-sidenav #drawer mode="side" position="end" [opened]="isShowing" opened class="side-nav">
         <tool-menu></tool-menu>
     </mat-sidenav>
@@ -17,7 +17,7 @@
             </button>
         </div>
         <div class="redo-button">
-            <button mat-flat-button color="primary" (click)="realoadCavnas()"> redo </button>
+            <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false" color="primary" (click)="realoadCavnas()"> redo </button>
         </div>
         <div id="canvas" class="canvas"></div>
     </mat-sidenav-content>
