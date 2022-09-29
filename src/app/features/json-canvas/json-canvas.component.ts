@@ -68,7 +68,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy {
 
   }
   public loadCanvas() {
-    this.canvas = SVG().addTo('#canvas').size('1200px', '800px');
+    this.canvas = SVG().addTo('#canvas');
     this.convertJsonToSVG()
   }
 
