@@ -48,7 +48,7 @@ export class JsonEditorComponent implements OnInit, OnDestroy {
         if (e && e.target) {
           self.fileContent = reader.result;
           self.isValidService.changeIfValid(self.ValidateJSON(reader.result));
-          self.handleFile();
+          self.handleFile(file.name);
         }
       };
       reader.readAsText(file);
@@ -65,7 +65,8 @@ export class JsonEditorComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  public handleFile() {
+  public handleFile(title: string = '') {
+    this.paserService.fileTitle = title
     this.paserService.fileContent = this.fileContent;
     this.paserService.parseJson();
   }

@@ -19,6 +19,7 @@
             <icon-home-button></icon-home-button>
             <div class="redo-button">
                 <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false" color="primary" (click)="realoadCavnas()"> redo </button>
+                <h2 *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false"> {{fileTitle}} </h2>
             </div>
             <div id="canvas" class="canvas"></div>
         </div>       

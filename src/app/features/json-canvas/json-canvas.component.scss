@@ -17,13 +17,13 @@
 .redo-button {
     text-align: center;
     height: 100px;
+    margin-top: 10px;
 }
 
 .canvas {
     border-right: 1px solid #673ab7;
     border-top: 1px solid #673ab7;
     border-bottom: 1px solid #673ab7;
-    z-index: -1;
     width: 1200px;
     height: 800px;
 }
@@ -34,9 +34,6 @@
         bottom: 100px;
         right: 20px;
         margin: 10px;
-        background-color: black;
-        border: 1px solid;
-        z-index: 1000;
     }
 
     .canvas {

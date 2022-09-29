@@ -17,6 +17,7 @@ export class ParserService {
   private keySeperator: JsonMapperModel = { Symbol: true , Key: false, KeyLink: true}
   private highestNestedValue = 0;
   public fileContent: string = '';
+  public fileTitle = '';
   constructor() { }
 
   public clearContent() {

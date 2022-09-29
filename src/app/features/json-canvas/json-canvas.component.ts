@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SVG, extend as SVGextend, Element as SVGElement, Svg } from '@svgdotjs/svg.js'
 import '@svgdotjs/svg.draggable.js'
 import { JsonMapperModel } from 'src/app/shared/models/JsonMapperModel';
@@ -13,14 +13,15 @@ import { MatSidenav } from '@angular/material/sidenav';
   templateUrl: './json-canvas.component.html',
   styleUrls: ['./json-canvas.component.scss']
 })
-export class JsonCanvasComponent implements OnInit, OnDestroy {
+export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   destroyed = new Subject<void>();
   public isMobile = false;
   public isShowing: boolean = false;
-
+  public fileTitle: string = ''
 
   constructor(public parserService: ParserService, public breakpointObserver: BreakpointObserver) {
     this.json = this.parserService.jsonModel;
+    this.fileTitle = this.parserService.fileTitle;
     breakpointObserver
       .observe([
         Breakpoints.XSmall,
@@ -37,6 +38,9 @@ export class JsonCanvasComponent implements OnInit, OnDestroy {
         }
       });
   }
+  ngAfterViewInit(): void {
+    this.loadCanvas();
+  }
 
   public json: JsonMapperModel[] = [];
   public canvas: Svg = new Svg();
@@ -50,7 +54,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy {
   public objectXaxisTracker: Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }> = new Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }>();
 
   ngOnInit(): void {
-    this.loadCanvas();
+    this.canvas = SVG().addTo('#canvas').size('1200px', '1800px');
   }
 
   ngOnDestroy(): void {
@@ -68,7 +72,6 @@ export class JsonCanvasComponent implements OnInit, OnDestroy {
 
   }
   public loadCanvas() {
-    this.canvas = SVG().addTo('#canvas');
     this.convertJsonToSVG()
   }
 
