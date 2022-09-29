@@ -3,7 +3,6 @@
         <tool-menu></tool-menu>
     </mat-sidenav>
     <mat-sidenav-content>
-        <icon-home-button></icon-home-button>
         <div class="float">
             <button mat-fab color="primary" mat-button (click)="toggleSideNave(drawer)" class="material-symbols-outlined">
                 <span *ngIf="drawer._animationState == 'void'; else content" class="material-symbols-outlined icon-margin">
@@ -16,9 +15,12 @@
                 </ng-template>
             </button>
         </div>
-        <div class="redo-button">
-            <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false" color="primary" (click)="realoadCavnas()"> redo </button>
-        </div>
-        <div id="canvas" class="canvas"></div>
+        <div>
+            <icon-home-button></icon-home-button>
+            <div class="redo-button">
+                <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false" color="primary" (click)="realoadCavnas()"> redo </button>
+            </div>
+            <div id="canvas" class="canvas"></div>
+        </div>       
     </mat-sidenav-content>
 </mat-sidenav-container>
