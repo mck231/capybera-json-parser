@@ -28,14 +28,13 @@
 // Mobile View
 @media only screen and (max-width: 600px) {
     .float {
-        bottom: 200px;
+        bottom: 100px;
         right: 20px;
     }
 
     .canvas {
-
         max-height: 500px;
-        max-width: 400px;
+        max-width: 350px;
         overflow: scroll;
 
     }
