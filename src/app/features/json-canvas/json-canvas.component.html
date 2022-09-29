@@ -5,7 +5,7 @@
     <mat-sidenav-content>
         <icon-home-button></icon-home-button>
         <div class="float">
-            <button mat-fab color="primary" mat-button (click)="drawer.toggle()" class="material-symbols-outlined">
+            <button mat-fab color="primary" mat-button (click)="toggleSideNave(drawer)" class="material-symbols-outlined">
                 <span *ngIf="drawer._animationState == 'void'; else content" class="material-symbols-outlined icon-margin">
                     arrow_back_ios
                 </span>

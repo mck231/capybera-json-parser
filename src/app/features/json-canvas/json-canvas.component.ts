@@ -251,4 +251,8 @@ export class JsonCanvasComponent implements OnInit, OnDestroy {
     ).fill({ color: '#D2B48C' }).id('path' + int).opacity(0.3);
     path.back();
   }
+
+  public toggleSideNave(drawer: MatSidenav) {
+    drawer.toggle();
+  }
 }
