@@ -17,7 +17,8 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   destroyed = new Subject<void>();
   public isMobile = false;
   public isShowing: boolean = false;
-  public fileTitle: string = ''
+  public fileTitle: string = '';
+  public toggleButton = true;
 
   constructor(public parserService: ParserService, public breakpointObserver: BreakpointObserver) {
     this.json = this.parserService.jsonModel;
@@ -54,7 +55,9 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   public objectXaxisTracker: Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }> = new Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }>();
 
   ngOnInit(): void {
+    this.toggleButton = false;
     this.canvas = SVG().addTo('#canvas').size('1200px', '1800px');
+    this.toggleButton = true;
   }
 
   ngOnDestroy(): void {
