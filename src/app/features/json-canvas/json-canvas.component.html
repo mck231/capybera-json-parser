@@ -1,11 +1,18 @@
-<mat-sidenav-container class="example-container" >
+<mat-sidenav-container class="example-container">
     <mat-sidenav #drawer mode="side" position="end" [opened]="isShowing" opened class="side-nav">
         <tool-menu></tool-menu>
     </mat-sidenav>
     <mat-sidenav-content>
         <div class="float">
-            <button mat-fab color="primary" *ngIf="toggleButton" mat-button (click)="toggleSideNave(drawer)" class="material-symbols-outlined">
-                <span *ngIf="drawer._animationState == 'void'; else content" class="material-symbols-outlined icon-margin">
+
+        </div>
+        <div class="nav">
+            <icon-home-button></icon-home-button>
+
+            <button mat-fab color="primary" mat-button (click)="toggleSideNave(drawer)"
+                class="material-symbols-outlined">
+                <span *ngIf="drawer._animationState == 'void'; else content"
+                    class="material-symbols-outlined icon-margin">
                     arrow_back_ios
                 </span>
                 <ng-template #content>
@@ -15,13 +22,11 @@
                 </ng-template>
             </button>
         </div>
-        <div>
-            <icon-home-button></icon-home-button>
-            <div class="redo-button">
-                <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false" color="primary" (click)="realoadCavnas()"> redo </button>
-                <h2 *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false"> {{fileTitle}} </h2>
-            </div>
-            <div id="canvas" class="canvas"></div>
-        </div>       
+        <div class="redo-button">
+            <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false"
+                color="primary" (click)="realoadCavnas()"> redo </button>
+            <h2 *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false"> {{fileTitle}} </h2>
+        </div>
+        <div id="canvas" class="canvas"></div>
     </mat-sidenav-content>
 </mat-sidenav-container>
