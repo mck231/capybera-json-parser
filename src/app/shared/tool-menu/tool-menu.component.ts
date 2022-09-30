@@ -49,4 +49,18 @@ export class ToolMenuComponent implements OnInit {
       result;
     });
   }
+
+  public exportJson() {
+    let file = new Blob(['hello world!'], {type: '.txt'});
+    let a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+    a.href = url;
+    a.download = "test";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);  
+    }, 0); 
+  }
 }
