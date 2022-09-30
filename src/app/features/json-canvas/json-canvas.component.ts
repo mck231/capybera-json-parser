@@ -97,6 +97,12 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       else if (item.KeyLink == true) {
         this.createColonSvgLink(arrayIndex)
       }
+      else if (item.Array == 'start') {
+
+      }
+      else if (item.Array == 'end') {
+
+      }
       else if (item.Object == 'start') {
         this.xAxis = this.xAxis + 100;
         this.createSymbolSvgLink('{', arrayIndex);
@@ -256,6 +262,13 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       `
     ).fill({ color: '#D2B48C' }).id('path' + int).opacity(0.3);
     path.back();
+  }
+
+  /**
+   * createArraySymbol
+   */
+  public createArraySymbol() {
+    // TODO: Finish this up
   }
 
   public toggleSideNave(drawer: MatSidenav) {
