@@ -94,14 +94,21 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         this.xAxis = this.xAxis + 100;
         this.addSvgValueToCanvas(item.Text, arrayIndex)
       }
+      else if (item.Key == false && item.Number) {
+        this.yAxis = this.yAxis + 50;
+        this.addSvgValueNumberToCanvas(item.Number, arrayIndex)
+      }
       else if (item.KeyLink == true) {
         this.createColonSvgLink(arrayIndex)
       }
       else if (item.Array == 'start') {
-
+        this.createArraySymbol('[', arrayIndex);
+        this.xAxis = this.xAxis + 50;
       }
       else if (item.Array == 'end') {
-
+        this.yAxis = this.yAxis + 50;
+        this.xAxis = this.xAxis - 50;
+        this.createArraySymbol(']', arrayIndex)
       }
       else if (item.Object == 'start') {
         this.xAxis = this.xAxis + 100;
@@ -112,17 +119,11 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
       else if (item.Object == 'end') {
-        //this.yAxis = this.yAxis + 50;
-        //console.table(this.objectXaxisTracker)
-
         let x = this.objectXaxisTracker.pop();
         this.xAxis = this.heightAndWidthForValueTracker[0].x
-        //console.warn(this.xAxis)
         this.createSymbolSvgLink('}', arrayIndex);
         if (x) {
-
           // move down complimentary symbol group
-
           let complimentarySymbolGroup = SVG('#symbolGroup' + x.startIndex);
           complimentarySymbolGroup.y(this.yAxis - 15)
           
@@ -187,11 +188,9 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       const squareKey = this.canvas.rect(10, 10).fill('#faf0e6').y(this.yAxis - 7).x(this.xAxis - 7).radius(10).stroke('#000').id('rectKey' + int);
       squareKey.height(yaxis).width(xaxis + 20);
       text.front()
-
       let keyGroup = this.canvas.group().id('keyGroup' + int);
       keyGroup.add(squareKey);
       keyGroup.add(text);
-
     }
   }
 
@@ -216,6 +215,24 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       if (line) {
         line.attr('x2', boxSize.x);
       }
+    }
+  }
+
+  public addSvgValueNumberToCanvas(value: number, int: number) {
+    let text = this.canvas.text(value.toString()).id('valueNumber' + int)
+    text.node.setAttribute('class', 'valueNumber');
+    text.font({ fill: '#000', family: 'Inconsolata' }).y(this.yAxis).x(this.xAxis);
+    let background = SVG('#valueNumber' + int);
+    if (background) {
+      const boxSize = background.bbox();
+      let xaxis = boxSize.width;
+      let yaxis = boxSize.height * 2;
+      const squareValue = this.canvas.rect(10, 10).fill('#C1E1C1').y(this.yAxis - 7).x(this.xAxis - 7).radius(10).stroke('#000').id('rectValue' + int);
+      squareValue.height(yaxis).width(xaxis + 20);
+      text.front()
+      let valueGroup = this.canvas.group().id('valueGroup' + int);
+      valueGroup.add(squareValue);
+      valueGroup.add(text);
     }
   }
 
@@ -267,8 +284,16 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   /**
    * createArraySymbol
    */
-  public createArraySymbol() {
-    // TODO: Finish this up
+  public createArraySymbol(symbol: string, int: number) {
+    let text = this.canvas.text(symbol).id('array' + int)
+    text.font({ fill: '#fff', family: 'Inconsolata', size: 28 }).y(this.yAxis - 15).x(this.xAxis);
+    let background = SVG('#array' + int);
+    if (background) {
+      const circleSymbol = this.canvas.circle(40, 40).fill('#000').cy(this.yAxis).cx(this.xAxis + 5).id('circle' + int);
+      let symbolGroup = this.canvas.group().id('symbolGroup' + int);
+      symbolGroup.add(circleSymbol);
+      symbolGroup.add(text);
+    }
   }
 
   public toggleSideNave(drawer: MatSidenav) {
