@@ -10,11 +10,11 @@ export class ParserService {
   private groupIndex = 0;
   private highestIndex = 0;
   private arrayStart: JsonMapperModel = { Array: 'start', Key: false }
-  private endStart: JsonMapperModel = { Array: 'end' , Key: false}
-  private objectStart: JsonMapperModel = { Object: 'start' , Key: false}
-  private objectEnd: JsonMapperModel = { Object: 'end' , Key: false}
-  private emtpyTile: JsonMapperModel = {  Text: ' ', Symbol: true , Key: false}
-  private keySeperator: JsonMapperModel = { Symbol: true , Key: false, KeyLink: true}
+  private endStart: JsonMapperModel = { Array: 'end', Key: false }
+  private objectStart: JsonMapperModel = { Object: 'start', Key: false }
+  private objectEnd: JsonMapperModel = { Object: 'end', Key: false }
+  private emtpyTile: JsonMapperModel = { Text: ' ', Symbol: true, Key: false }
+  private keySeperator: JsonMapperModel = { Symbol: true, Key: false, KeyLink: true }
   private highestNestedValue = 0;
   public fileContent: string = '';
   public fileTitle = '';
@@ -33,7 +33,7 @@ export class ParserService {
     try {
       let readyFormatt = JSON.parse(this.fileContent);
       this.startJsonParse(readyFormatt);
-      //console.table(this.jsonModel);
+      console.table(this.jsonModel);
     } catch (error) {
       console.log(error);
     }
@@ -44,7 +44,7 @@ export class ParserService {
       //start by pushing the key to array
       let keyitem: JsonMapperModel = Object();
       keyitem.Key = true;
-      keyitem.Text = prop;      
+      keyitem.Text = prop;
       this.jsonModel.push(keyitem);
       this.jsonModel.push(this.keySeperator)
       //let valueitem: JsonMapperModel = Object();
@@ -106,39 +106,47 @@ export class ParserService {
    * @param data json to parse
    */
   private startJsonParse(data: any) {
-    //do something
-    for (let type in data) {
-      let item: JsonMapperModel = Object();
-      item.Key = true;
-      item.Text = type;
-
-      this.jsonModel.push(item);
-      this.jsonModel.push(this.keySeperator)
-      // if json is an array 
-      if (Array.isArray(data[type])) {
-        this.jsonModel.push(this.arrayStart);
-
-        // let emptTile = Object.assign({}, this.emtpyTile);
-        // emptTile.Cols = 12;
-        // this.jsonModel.push(emptTile)
-        this.dealWithArray(data[type])
-        this.jsonModel.push(this.endStart);
-      }
-      else if (data[type] instanceof Object && !data[type].length) {
-        this.jsonModel.push(this.objectStart)
-        this.dealWithOjbect(data[type])
-        this.jsonModel.push(this.objectEnd)
-      }
-      else {
-        let valueItem: JsonMapperModel = Object();
-        valueItem.Key = false;
-        this.determineValueType(data[type], valueItem);
-        //valueItem.Text = data[type];
-        this.jsonModel.push(valueItem);
-
-      }
+    // if json starts with an Array
+    if (Array.isArray(data)) {
+      this.jsonModel.push(this.arrayStart);
+      this.dealWithArray(data);
+      this.jsonModel.push(this.endStart);
     }
-    this.whiteSpaceCalculation(this.jsonModel);
+    else {
+      for (let type in data) {
+        let item: JsonMapperModel = Object();
+        item.Key = true;
+        item.Text = type;
+
+        this.jsonModel.push(item);
+        this.jsonModel.push(this.keySeperator)
+        // if json is an array 
+        if (Array.isArray(data[type])) {
+          this.jsonModel.push(this.arrayStart);
+
+          // let emptTile = Object.assign({}, this.emtpyTile);
+          // emptTile.Cols = 12;
+          // this.jsonModel.push(emptTile)
+          this.dealWithArray(data[type])
+          this.jsonModel.push(this.endStart);
+        }
+        else if (data[type] instanceof Object && !data[type].length) {
+          this.jsonModel.push(this.objectStart)
+          this.dealWithOjbect(data[type])
+          this.jsonModel.push(this.objectEnd)
+        }
+        else {
+          let valueItem: JsonMapperModel = Object();
+          valueItem.Key = false;
+          this.determineValueType(data[type], valueItem);
+          //valueItem.Text = data[type];
+          this.jsonModel.push(valueItem);
+
+        }
+      }
+      this.whiteSpaceCalculation(this.jsonModel);
+    }
+
   }
 
   private determineValueType(value: any, valueItem: JsonMapperModel): void {
