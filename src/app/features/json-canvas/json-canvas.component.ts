@@ -115,6 +115,9 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       else if (item.Array == 'start') {
         isInArray = true;
+        if(startOjbectIndent == true){
+          this.changeCordinates(false);
+        }
         this.createSymbol('[', arrayIndex, 'array');
         if (this.xAxis && arrayIndex) {
           let objStartAndEnd = { x: this.xAxis, y: this.yAxis, x2: 0, y2: 0, startIndex: arrayIndex, endIndex: 0 };
@@ -131,7 +134,8 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         if (x) {
           // move down complimentary symbol group
           let complimentarySymbolGroup = SVG('#symbolGroup' + x.startIndex);
-          complimentarySymbolGroup.y(this.yAxis - 15)
+
+          complimentarySymbolGroup.x(this.xAxis)
           
           x.endIndex = arrayIndex;
           
@@ -141,7 +145,13 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
             x.x2 = valBbox.x2
             x.y2 = valBbox.y2
           }
-          if(!val) {
+          let numVal = SVG('#valueNumber' + (arrayIndex - 1));
+          if (numVal) {
+            let valBbox = numVal.bbox()
+            x.x2 = valBbox.x2
+            x.y2 = valBbox.y2
+          } 
+          if(!val && !numVal) {
             // found path for wrapping object
             let previousObject = SVG('#path' + (arrayIndex - 1));
             x.x2 = previousObject.bbox().x2;
@@ -180,6 +190,12 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
             x.x2 = valBbox.x2
             x.y2 = valBbox.y2
           }
+          let numVal = SVG('#valueNumber' + (arrayIndex - 1));
+          if (numVal) {
+            let valBbox = numVal.bbox()
+            x.x2 = valBbox.x2
+            x.y2 = valBbox.y2
+          } 
           if(!val) {
             // found path for wrapping object
             let previousObject = SVG('#path' + (arrayIndex - 1));
