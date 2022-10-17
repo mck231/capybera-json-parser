@@ -24,20 +24,20 @@ $cyan-palette: (
     A400 : #14ffb8,
     A700 : #00f9ae,
     contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
+        50 : #002625,
+        100 : #002625,
+        200 : #002625,
+        300 : #002625,
+        400 : #dddddd,
+        500 : #dddddd,
+        600 : #dddddd,
+        700 : #dddddd,
+        800 : #dddddd,
+        900 : #dddddd,
+        A100 : #002625,
+        A200 : #002625,
+        A400 : #002625,
+        A700 : #002625,
     )
 );
 
@@ -57,20 +57,20 @@ $orange-palette: (
     A400 : #ffebda,
     A700 : #ffdec1,
     contrast: (
-        50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #000000,
-        500 : #000000,
-        600 : #000000,
-        700 : #000000,
-        800 : #000000,
-        900 : #000000,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #000000,
+        50 : #002625,
+        100 : #002625,
+        200 : #002625,
+        300 : #002625,
+        400 : #002625,
+        500 : #002625,
+        600 : #002625,
+        700 : #002625,
+        800 : #002625,
+        900 : #002625,
+        A100 : #002625,
+        A200 : #002625,
+        A400 : #002625,
+        A700 : #002625,
     )
 );
 
@@ -78,7 +78,7 @@ $orange-palette: (
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $capybera-primary: mat.define-palette(mat.$orange-palette);
-$capybera-accent: mat.define-palette(mat.$cyan-palette);
+$capybera-accent: mat.define-palette(mat.$cyan-palette, 900);
 
 // The warn palette is optional (defaults to red).
 $capybera-warn: mat.define-palette(mat.$red-palette);
