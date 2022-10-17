@@ -1,8 +1,9 @@
 .main-content {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    margin-right: 8%;
+    align-items: center;
+    
+    //margin-right: 8%;
 }
 
 .button-list {
@@ -18,7 +19,9 @@
 // Mobile View
 @media only screen and (max-width: 600px) {
     .home {
-        background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
+        //background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
+        background-image: url('./../../../assets/wave-haikei\ light\ Orange.svg');
+
     }
 
     .title {
@@ -46,8 +49,13 @@
 // bigger screens
 @media only screen and (min-width: 600px) {
     .home {
-        background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
-        height: 95vh;
+        //background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
+        background-image: url('./../../../assets/wave-haikei\ light\ Orange.svg');
+        aspect-ratio: 960/300;
+        width: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
     }
 
     .title {
@@ -55,14 +63,19 @@
         max-width: 868px;
         line-height: 76px;
         font-family: "Tiro Gurmukhi rev=2";
-        margin-bottom: 60px;
-        text-align: end;
+        text-align: center;
+        margin-top: 150px;
+    }
+
+    .focal-point{
+        margin-bottom: 300px;
     }
 
     .main-content-text {
         font-size: 16px;
         max-width: 668px;
         line-height: 25px;
+        margin-bottom: 60px;
     }
 
     .button-summary p {

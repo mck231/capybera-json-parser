@@ -304,7 +304,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   public createColonSvgLink(int: number) {
     let kSVG = SVG('#key' + (int - 1));
     let line = this.canvas.line(kSVG.bbox().x2, this.yAxis + 5, kSVG.bbox().x2 + 70, this.yAxis + 5).id('colon' + int);
-    line.stroke({ color: '#000', width: 3, linecap: 'round' })
+    line.stroke({ color: '#004442', width: 3, linecap: 'round' })
     line.back();
   }
 
