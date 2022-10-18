@@ -12,8 +12,8 @@ import { ValidjsonService } from "../services/validjson.service";
       <p>Do you wish to continue?</p>      
   </div>
   <div mat-dialog-actions>
-      <button mat-button (click)="dialogRef.close()"> Cancel </button>
-      <button mat-button (click)="onNoClick()" color="warn" cdkFocusInitial>Ok</button>
+      <button mat-flat-button color="accent" (click)="dialogRef.close()"> Cancel </button>
+      <button mat-flat-button (click)="onNoClick()" color="warn" cdkFocusInitial>Ok</button>
   </div>
 `,
   })

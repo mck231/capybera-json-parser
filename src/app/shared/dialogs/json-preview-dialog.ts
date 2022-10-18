@@ -11,7 +11,7 @@ import { ValidjsonService } from "../services/validjson.service";
       <p>content here</p>
   </div>
   <div mat-dialog-actions>
-      <button mat-button (click)="close()"> OK </button>
+      <button mat-flat-button color="primary" (click)="close()"> OK </button>
   </div>
 `,
   })

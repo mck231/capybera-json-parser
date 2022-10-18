@@ -1,20 +1,20 @@
 <div class="side-nav-width">
-    <div class="container">
-        <h1 class="center">Tools</h1>
-    </div>
     <div class="verticle">
         <div class="glow-circle" [ngClass]="validJson == true ? 'green' : 'red'"></div>
         <h2>Valid Json</h2>
     </div>
+    <div class="container">
+        <h1 class="center">Actions</h1>
+    </div>   
     <div class="center">
-        <button mat-flat-button color="accent" matTooltip="Cast Selected to Object">To Object</button>
-        <button mat-flat-button color="accent" matTooltip="Cast Selected to Array">To Array</button>
+        <button mat-flat-button color="primary" matTooltip="Cast Selected to Object">To Object</button>
+        <button mat-flat-button color="primary" matTooltip="Cast Selected to Array">To Array</button>
     </div>
     <div class="center">
-        <button mat-flat-button color="accent" matTooltip="Export current Json changes" (click)="exportJson()">Export Json</button>
-        <button mat-flat-button color="accent" matTooltip="View Current state of JSON" (click)="viewJson()">View Json</button>
+        <button mat-flat-button color="primary" matTooltip="Export current Json changes" (click)="exportJson()">Export Json</button>
+        <button mat-flat-button color="primary" matTooltip="View Current state of JSON" (click)="viewJson()">View Json</button>
     </div>
     <div class="center">
-        <button mat-flat-button color="accent" matTooltip="Either type or upload json" (click)="enterNewJson()">Reenter Json</button>        
+        <button mat-flat-button color="primary" matTooltip="Either type or upload json" (click)="enterNewJson()">Reenter Json</button>        
     </div>
 </div>

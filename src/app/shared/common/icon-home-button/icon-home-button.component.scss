@@ -1,7 +1,13 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$my-palette: mat.define-palette(mat.$orange-palette);
+
+
 .logo-float{
     position:absolute;
     left: 0px;
-    background: rgb(246, 246, 82);
+    background:  mat.get-color-from-palette($my-palette, 300);
     border-radius: 6px;
 }
 

@@ -1,9 +1,14 @@
 .tool-window{
-    height: 95vh;
+    //height: 95vh;
     display: flex;
-    justify-content: flex-end;
-    background-image: linear-gradient(121.55deg,#673ab7 17.34%,linen 113.19%);;
-
+    justify-content: center;
+    //background-image: linear-gradient(121.55deg,#673ab7 17.34%,linen 113.19%);;
+    background-image: url('./../../../assets/wave-haikei\ light\ Orange.svg');
+    aspect-ratio: 960/300;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 .input-form{
     padding: 10px;
@@ -18,12 +23,11 @@
     display: inline-block;
     vertical-align: top;
 }
-.workSpace{
-    background-color: whitesmoke;
-    color:black;
-    height: 95vh;
+// .workSpace{
+//     background-color: whitesmoke;
+//     color:black;
 
-}
+// }
 .example-full-width {
     width: 75%;
   }
@@ -32,6 +36,8 @@
     text-align: center;
     max-width: 700px;
     margin-bottom: 30px;
+    margin-top: 20px;
+
     font-family: "Tiro Gurmukhi rev=2";
 }
 .type-input{
@@ -47,8 +53,8 @@
 .upload-file{
     margin-bottom: 15px;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    //flex-direction: column;
+    //align-items: flex-end;
     margin-right: 15px;
 }
 

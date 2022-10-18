@@ -14,6 +14,7 @@ import { InputJsonDialog } from './shared/dialogs/input-json-dialog';
 import { HomeComponent } from './features/home/home.component';
 import { PreviewJsonDialog } from './shared/dialogs/json-preview-dialog';
 import { IconHomeButtonComponent } from './shared/common/icon-home-button/icon-home-button.component';
+import { CardComponentComponent } from './shared/common/card-component/card-component.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { IconHomeButtonComponent } from './shared/common/icon-home-button/icon-h
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialExampleModule,
-    IconHomeButtonComponent
+    IconHomeButtonComponent,
+    CardComponentComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,3 +1,16 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$my-palette: mat.define-palette(mat.$orange-palette);
+$my-second-pallette: mat.define-palette(mat.$cyan-palette);
+
+
+.side-nav{
+    background-color: mat.get-color-from-palette($my-palette, 100);
+}
+.example-container{
+    background-color: #e5e4e2 
+}
 .sidenav-toggle {
     display: flex;
     flex-direction: column;
@@ -20,11 +33,11 @@
 }
 
 .canvas {
-    border-right: 1px solid #673ab7;
-    border-top: 1px solid #673ab7;
-    border-bottom: 1px solid #673ab7;
+    border-right: 1px solid mat.get-color-from-palette($my-second-pallette, 900);
+    border-top: 1px solid mat.get-color-from-palette($my-second-pallette, 900);
+    border-bottom: 1px solid mat.get-color-from-palette($my-second-pallette, 900);
     width: 1200px;
-    height: 800px;
+    height:700px;
 }
 .nav{
     display: flex;
