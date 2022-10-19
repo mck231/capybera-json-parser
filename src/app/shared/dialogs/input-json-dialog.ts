@@ -8,12 +8,12 @@ import { ValidjsonService } from "../services/validjson.service";
     selector: 'dialog-overview-example-dialog',
   template: `
   <h1 mat-dialog-title>Data will be lost</h1>
-  <div mat-dialog-content>
+  <!-- <div mat-dialog-content>
       <p>Do you wish to continue?</p>      
-  </div>
+  </div> -->
   <div mat-dialog-actions>
       <button mat-flat-button color="accent" (click)="dialogRef.close()"> Cancel </button>
-      <button mat-flat-button (click)="onNoClick()" color="warn" cdkFocusInitial>Ok</button>
+      <button mat-flat-button (click)="onNoClick()" color="warn" cdkFocusInitial>Continue</button>
   </div>
 `,
   })
