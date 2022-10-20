@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, Self, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Subject, Subscription, takeUntil } from 'rxjs';
+import { CardModel } from 'src/app/shared/models/CardModel';
 import { ParserService } from 'src/app/shared/services/parserService/parser.service';
 import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 
@@ -18,11 +19,14 @@ export class JsonEditorComponent implements OnInit, OnDestroy {
   @ViewChild('inputJson', { read: ElementRef }) inputJson: ElementRef<HTMLElement> | undefined;
   public sub: Subscription | undefined;
   public exampleString = `Ex. { "events" : "hi" }`
+  public uploadCard: CardModel = { Title: 'Browse file on Computer', Body: 'You can select a .txt file from your computer with valid JSON and watch it come to life.'}
+  public emptyCanvasCard: CardModel = { Title: 'Just want to take a peek?', Body: 'If you wanna see what this tool is about, just click below. A simple JSON object will get loaded to play with.'}
+  public typedDataCard: CardModel = { Title: 'Type in JSON', Body: 'Feel free to type in or copy and paste JSON data into the textarea below.'}
 
   constructor(private host: ElementRef<HTMLInputElement>,
     public isValidService: ValidjsonService,
     public paserService: ParserService) { }
-
+    
   ngOnInit(): void {
     this.sub = this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
   }

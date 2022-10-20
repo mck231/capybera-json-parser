@@ -1,8 +1,15 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$my-palette: mat.define-palette(mat.$orange-palette);
+$my-second-pallette: mat.define-palette(mat.$cyan-palette);
+
+
 .example-card {
     max-width: 400px;
+    background-color: mat.get-color-from-palette($my-second-pallette, 800);
   }
   
-  .example-header-image {
-    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-    background-size: cover;
-  }
+textarea{
+  color: #002625 !important;
+}

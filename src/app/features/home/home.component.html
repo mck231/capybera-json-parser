@@ -4,47 +4,30 @@
         <div class="focal-point">
             <h2 class="title">
                 Capybera Json Tool
-            </h2>      
+            </h2>
             <div class="button-summary">
                 <p>
-                    Fast and easy way to 
-                    create mock objects or test structures. 
+                    Fast and easy way to
+                    create mock objects or test structures.
                 </p>
                 <div class="button-list">
                     <a mat-raised-button routerLink="../tool" color="primary">Go to Tool </a>
                 </div>
             </div>
         </div>
-          
-       
-        <div>
+        <div class="card-group">
             <div class="main-content-text">
-                <h2>Why</h2>
-                <mat-divider></mat-divider>
-                <p>                
-                    Trying to read Json data shouldn't be distracting or dificult. 
-                    Editing Json data should be simple and result in valid Json.
-                </p>
+                <card-component [cardData]="whyCard">
+                </card-component>
             </div>
             <div class="main-content-text">
-                <h2>What</h2>
-                <mat-divider></mat-divider>
-                <p>                
-                    This is a static web application written using the Angular framework.
-                    Our tool lets our users upload, visualize, edit, and export json data.
-                </p>
+                <card-component [cardData]="whatCard">
+                </card-component>
             </div>
             <div class="main-content-text">
-                <h2>Who</h2>
-                <mat-divider></mat-divider>
-                <p>                
-                    Intended audience is anyone working with Json 
-                    and needs a more robust tool to work with data.
-                </p>
+                <card-component [cardData]="whoCard">
+                </card-component>
             </div>
         </div>
-        
-        
-        
-    </div>    
+    </div>
 </div>

@@ -1,3 +1,10 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+$my-palette: mat.define-palette(mat.$orange-palette);
+$my-second-pallette: mat.define-palette(mat.$cyan-palette);
+
+
 .main-content {
     display: flex;
     flex-direction: column;
@@ -16,6 +23,11 @@
     max-width: 668px;
 }
 
+.card-group{
+    display: flex;
+    align-content: space-around;
+}
+
 // Mobile View
 @media only screen and (max-width: 600px) {
     .home {
@@ -31,6 +43,7 @@
         text-align: end;
         margin-top: 40px;
         margin-left: 60px;
+        text-decoration: underline mat.get-color-from-palette($my-palette, 300);;
     }
 
     .main-content-text {
@@ -65,6 +78,8 @@
         font-family: "Tiro Gurmukhi rev=2";
         text-align: center;
         margin-top: 150px;
+        text-decoration: underline mat.get-color-from-palette($my-palette, 300);;
+
     }
 
     .focal-point{
@@ -76,9 +91,12 @@
         max-width: 668px;
         line-height: 25px;
         margin-bottom: 60px;
+        margin-left: 100px;
     }
 
     .button-summary p {
-        max-width: 338px;
+        max-width: 200px;
+        margin-top: 10px;
+        margin-left: 40px;
     }
 }

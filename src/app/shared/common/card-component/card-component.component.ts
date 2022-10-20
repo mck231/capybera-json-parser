@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { CardModel } from '../../models/CardModel';
 
 @Component({
   selector: 'card-component',
@@ -11,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./card-component.component.scss']
 })
 export class CardComponentComponent implements OnInit {
-
+  @Input() cardData: CardModel = new CardModel();
   constructor() { }
 
   ngOnInit(): void {
