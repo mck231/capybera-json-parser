@@ -10,6 +10,22 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
     background-color: mat.get-color-from-palette($my-second-pallette, 800);
   }
   
-textarea{
-  color: #002625 !important;
-}
+  .mat-card-header{
+    background-color:mat.get-color-from-palette($my-palette, 200); ;
+    padding:5px ;
+  }
+
+  .mat-card-content{
+    color: mat.get-color-from-palette($my-palette, 50);    
+  }
+  
+   .mat-card{
+    padding:0 ;
+  }
+  
+  .mat-card-content{
+    padding:5px ;
+  }
+  .mat-card-actions{
+    margin-bottom: 10px;
+  }

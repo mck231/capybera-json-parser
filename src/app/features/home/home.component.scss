@@ -21,6 +21,7 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
     display: flex;
     margin-top: 60px;
     max-width: 668px;
+    color: mat.get-color-from-palette($my-palette, 100);    
 }
 
 .card-group{
@@ -43,7 +44,10 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
         text-align: end;
         margin-top: 40px;
         margin-left: 60px;
-        text-decoration: underline mat.get-color-from-palette($my-palette, 300);;
+        //text-underline-position: under mat.get-color-from-palette($my-palette, 300);
+        text-decoration-thickness: 2px;
+        text-underline-position: under;
+        text-decoration: underline mat.get-color-from-palette($my-palette, 300);
     }
 
     .main-content-text {
@@ -78,7 +82,9 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
         font-family: "Tiro Gurmukhi rev=2";
         text-align: center;
         margin-top: 150px;
-        text-decoration: underline mat.get-color-from-palette($my-palette, 300);;
+        text-decoration-thickness: 2px;
+        text-underline-position: under;
+        text-decoration: underline mat.get-color-from-palette($my-palette, 300);
 
     }
 

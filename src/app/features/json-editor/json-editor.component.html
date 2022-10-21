@@ -7,31 +7,37 @@
             </h2>
         </div>
         <div class="card-group">
-            <div class="card">
-                <card-component [cardData]="uploadCard">
-                    <input #jsonInput hidden="true" type="file" onclick="this.value=null"
-                        (change)="jsonFileUploaded($event)" accept=".txt" />
-                    <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse File <span
-                            class="material-symbols-outlined">
-                            upload_file
-                        </span></button>
-                </card-component>
-            </div>
-            <div class="card">
-                <card-component [cardData]="emptyCanvasCard"> <button mat-flat-button color="primary"
-                        (click)="noDataCanvas()">
-                        Empty Canvas </button>
-                </card-component>
-            </div>
-            <div class="card">
+            <div class="card-row">
+                <div class="card">
+                    <card-component [cardData]="uploadCard">
+                        <div class="margin-bottom">
+                            <input #jsonInput hidden="true" type="file" onclick="this.value=null"
+                            (change)="jsonFileUploaded($event)" accept=".txt" />
+                        <button mat-flat-button color="primary" (click)="jsonInput.click()">Browse File</button>
+                        </div>
+                    </card-component>
+                </div>
+                <div class="card">
+                    <card-component [cardData]="emptyCanvasCard">
+                        <div class="margin-bottom">
+                            <button mat-flat-button color="primary"
+                            (click)="noDataCanvas()">
+                            Empty Canvas </button>
+                        </div> 
+                    </card-component>
+                </div>
+            </div>            
+            <div class="typed-card">
                 <card-component [cardData]="typedDataCard">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <textarea class="text-area-input" matInput placeholder="{{exampleString}}"
-                            #inputJson></textarea>
-                    </mat-form-field>
-                    <div>
-                        <button mat-flat-button color="primary" (click)="userTypedJson()"> Submit Typed Text </button>
-                    </div>
+                    <div class="margin-bottom">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <textarea class="text-area-input" matInput placeholder="{{exampleString}}"
+                                #inputJson></textarea>
+                        </mat-form-field>
+                        <div>
+                            <button mat-flat-button color="primary" (click)="userTypedJson()"> Submit Typed Text </button>
+                        </div>
+                    </div>                   
                 </card-component>
             </div>
         </div>
