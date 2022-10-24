@@ -15,6 +15,7 @@ import { HomeComponent } from './features/home/home.component';
 import { PreviewJsonDialog } from './shared/dialogs/json-preview-dialog';
 import { IconHomeButtonComponent } from './shared/common/icon-home-button/icon-home-button.component';
 import { CardComponentComponent } from './shared/common/card-component/card-component.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { CardComponentComponent } from './shared/common/card-component/card-comp
     BrowserAnimationsModule,
     MaterialExampleModule,
     IconHomeButtonComponent,
-    CardComponentComponent
+    CardComponentComponent,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

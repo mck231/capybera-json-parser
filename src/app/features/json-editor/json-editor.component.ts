@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, Self, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatSidenav } from '@angular/material/sidenav';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { CardModel } from 'src/app/shared/models/CardModel';
@@ -12,7 +13,13 @@ import { ValidjsonService } from 'src/app/shared/services/validjson.service';
   styleUrls: ['./json-editor.component.scss']
 })
 export class JsonEditorComponent implements OnInit, OnDestroy {
-
+  public colorControl = new FormControl('primary');
+  public fontSizeControl = new FormControl(16, Validators.min(10));
+  public options = this._formBuilder.group({
+    color: this.colorControl,
+    fontSize: this.fontSizeControl,
+  });
+  
   public file: File | null = null;
   public fileContent: any = '';
   public validJson: boolean = false;
@@ -25,7 +32,8 @@ export class JsonEditorComponent implements OnInit, OnDestroy {
 
   constructor(private host: ElementRef<HTMLInputElement>,
     public isValidService: ValidjsonService,
-    public paserService: ParserService) { }
+    public paserService: ParserService,
+    private _formBuilder: FormBuilder) { }
     
   ngOnInit(): void {
     this.sub = this.isValidService.isValid.subscribe((value) => { this.validJson = value; })
@@ -95,5 +103,9 @@ export class JsonEditorComponent implements OnInit, OnDestroy {
       this.paserService.fileContent = emptyJSON;
       this.paserService.parseJson();
     }
+  }
+
+  getFontSize() {
+    return Math.max(10, this.fontSizeControl.value || 0);
   }
 }
