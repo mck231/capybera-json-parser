@@ -32,7 +32,7 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
 // Mobile View
 @media only screen and (max-width: 600px) {
     .home {
-        //background-image: linear-gradient(121.55deg, #673ab7 17.34%, linen 113.19%);
+        // https://app.haikei.app/
         background-image: url('./../../../assets/wave-haikei\ light\ Orange.svg');
 
     }

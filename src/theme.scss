@@ -8,6 +8,9 @@
 // Be sure that you only ever include this mixin once!
 @include mat.core();
 
+// Material Theme
+// https://m2.material.io/resources/color/#!/?view.left=0&view.right=1&primary.color=ffba5b&secondary.color=007562&primary.text.color=002625&secondary.text.color=dddddd
+
 $cyan-palette: (
     50 : #e0eeec,
     100 : #b3d6d0,
