@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SVG, extend as SVGextend, Element as SVGElement, Svg } from '@svgdotjs/svg.js'
 import '@svgdotjs/svg.draggable.js'
 import { JsonMapperModel } from 'src/app/shared/models/JsonMapperModel';
@@ -23,7 +23,10 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   public fileTitle: string = '';
   public toggleButton = true;
 
-  constructor(public parserService: ParserService, public breakpointObserver: BreakpointObserver) {
+  constructor(public parserService: ParserService, 
+    public breakpointObserver: BreakpointObserver,
+    private cdRef: ChangeDetectorRef   
+    ) {
     this.json = this.parserService.jsonModel;
     this.fileTitle = this.parserService.fileTitle;
     breakpointObserver
@@ -44,6 +47,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngAfterViewInit(): void {
     this.loadCanvas();
+    this.cdRef.detectChanges(); 
   }
 
   public json: JsonMapperModel[] = [];
