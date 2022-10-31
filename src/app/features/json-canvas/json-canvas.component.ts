@@ -10,6 +10,8 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { Box } from '@svgdotjs/svg.js';
 import { Text } from '@svgdotjs/svg.js';
 import { Rect } from '@svgdotjs/svg.js';
+import { LegendDialog } from 'src/app/shared/dialogs/legend-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'json-canvas',
@@ -17,6 +19,7 @@ import { Rect } from '@svgdotjs/svg.js';
   styleUrls: ['./json-canvas.component.scss']
 })
 export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
+
   destroyed = new Subject<void>();
   public isMobile = false;
   public isShowing: boolean = false;
@@ -24,6 +27,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   public toggleButton = true;
 
   constructor(public parserService: ParserService, 
+    public dialog: MatDialog,
     public breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef   
     ) {
@@ -342,5 +346,16 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public toggleSideNave(drawer: MatSidenav) {
     drawer.toggle();
+  }
+
+  public viewLegend() {
+    const dialogRef = this.dialog.open(LegendDialog, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      result;
+    });
   }
 }
