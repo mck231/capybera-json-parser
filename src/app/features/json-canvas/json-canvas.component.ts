@@ -49,8 +49,8 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
   }
-  ngAfterViewInit(): void {
-    this.loadCanvas();
+  ngAfterViewInit(): void {    
+    this.convertJsonToSVG()
     this.cdRef.detectChanges(); 
   }
 
@@ -84,9 +84,6 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     this.heightAndWidthForValueTracker = [];
     this.convertJsonToSVG()
 
-  }
-  public loadCanvas() {
-    this.convertJsonToSVG()
   }
 
   public changeCordinates(isInArray: boolean) {
