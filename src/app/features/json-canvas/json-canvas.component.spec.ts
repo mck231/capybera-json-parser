@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { JsonCanvasComponent } from './json-canvas.component';
 
@@ -8,7 +9,12 @@ describe('JsonCanvasComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ JsonCanvasComponent ]
+      declarations: [ JsonCanvasComponent ],
+      imports: [ MatDialogModule],
+      providers: [
+          { provide: MAT_DIALOG_DATA, useValue: {} },
+          { provide: MatDialogRef, useValue: {} }
+        ]
     })
     .compileComponents();
   });
