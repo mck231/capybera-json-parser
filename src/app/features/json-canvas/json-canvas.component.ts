@@ -67,7 +67,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     this.toggleButton = false;
-    this.canvas = SVG().addTo('#canvas');
+    this.canvas = SVG().addTo('#canvas').size('100%', '100%');
     this.toggleButton = true;
   }
 
