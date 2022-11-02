@@ -47,11 +47,11 @@ import { MatDialogRef } from "@angular/material/dialog";
   <div class='my-legend'>
 <div class='legend-scale'>
   <ul class='legend-labels'>
-    <li><span style='background:#8DD3C7;'></span>Values that are Strings</li>
-    <li><span style='background:#C1E1C1;'></span>Two</li>
-    <li><span style='background:#BEBADA;'></span>Three</li>
-    <li><span style='background:#FB8072;'></span>Four</li>
-    <li><span style='background:#80B1D3;'></span>etc</li>
+    <li><span style='background:#faf0e6;'></span>Represents key</li>
+    <li><span style='background:#dee8f2;'></span>Represents values that are Strings</li>
+    <li><span style='background:#c1e1c1;'></span>Represents values that are Numbers</li>
+    <li><span style='background:#fb94b5;'></span>Represents an Array of values</li>
+    <li><span style='background:#d2b48c;'></span>Represents an Object with a key and value</li>
   </ul>
 </div>
 </div>

@@ -350,7 +350,7 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public viewLegend() {
     const dialogRef = this.dialog.open(LegendDialog, {
-      width: '250px'
+      width: '300px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
