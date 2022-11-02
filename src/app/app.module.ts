@@ -16,6 +16,7 @@ import { PreviewJsonDialog } from './shared/dialogs/json-preview-dialog';
 import { IconHomeButtonComponent } from './shared/common/icon-home-button/icon-home-button.component';
 import { CardComponentComponent } from './shared/common/card-component/card-component.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LegendDialog } from './shared/dialogs/legend-dialog';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     JsonCanvasComponent,
     InputJsonDialog,
     PreviewJsonDialog,
-    HomeComponent
+    HomeComponent,
+    LegendDialog
   ],
   imports: [
     BrowserModule,
