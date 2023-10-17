@@ -1,8 +1,7 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { SVG, extend as SVGextend, Element as SVGElement, Svg } from '@svgdotjs/svg.js'
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { SVG, Element as SVGElement, Svg } from '@svgdotjs/svg.js'
 import '@svgdotjs/svg.draggable.js'
 import { JsonMapperModel } from 'src/app/shared/models/JsonMapperModel';
-import { ValidjsonService } from 'src/app/shared/services/validjson.service';
 import { ParserService } from 'src/app/shared/services/parserService/parser.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Subject, takeUntil } from 'rxjs';
@@ -12,6 +11,15 @@ import { Text } from '@svgdotjs/svg.js';
 import { Rect } from '@svgdotjs/svg.js';
 import { LegendDialog } from 'src/app/shared/dialogs/legend-dialog';
 import { MatDialog } from '@angular/material/dialog';
+import {KeyTextStrategy} from "./strategies/keyTextStrategy";
+import {JsonItemDrawingStrategy} from "../../shared/interfaces/jsonItemDrawingStrategy";
+import {KeyLinkStrategy} from "./strategies/keyLinkStrategy";
+import {ValueTextStrategy} from "./strategies/valueTextStrategy";
+import {ValueNumberStrategy} from "./strategies/valueNumberStrategy";
+import {ArrayStartStrategy} from "./strategies/arrayStartStrategy";
+import {ArrayEndStrategy} from "./strategies/arrayEndStrategy";
+import {ObjectStartStrategy} from "./strategies/objectStartStrategy";
+import {ObjectEndStrategy} from "./strategies/objectEndStrategy";
 
 @Component({
   selector: 'json-canvas',
@@ -26,10 +34,10 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   public fileTitle: string = '';
   public toggleButton = true;
 
-  constructor(public parserService: ParserService, 
+  constructor(public parserService: ParserService,
     public dialog: MatDialog,
     public breakpointObserver: BreakpointObserver,
-    private cdRef: ChangeDetectorRef   
+    private cdRef: ChangeDetectorRef
     ) {
     this.json = this.parserService.jsonModel;
     this.fileTitle = this.parserService.fileTitle;
@@ -49,19 +57,20 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       });
   }
-  ngAfterViewInit(): void {    
+  ngAfterViewInit(): void {
     this.convertJsonToSVG()
-    this.cdRef.detectChanges(); 
+    this.cdRef.detectChanges();
   }
 
   public json: JsonMapperModel[] = [];
   public canvas: Svg = new Svg();
   public heightAndWidthForValueTracker: Array<{ x: number, y: number }> = [];
 
-  /** this will mark the horizontal axis in regards to the canvas */
+  /** this will mark the horizontal axis in regard to the canvas */
   public xAxis: number = 50;
-  /** this will mark the verticle axis in regards to the canvas */
+  /** this will mark the vertical axis in regard to the canvas */
   public yAxis: number = 40;
+  public arrayIndex = 0;
   //initialise array to track the start and end of objects
   public objectXaxisTracker: Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }> = new Array<{ x: number, y: number, x2: number, y2: number, startIndex: number, endIndex: number }>();
 
@@ -73,11 +82,11 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.destroyed.next();
-    this.destroyed.complete();  
+    this.destroyed.complete();
   }
 
-  
-  public realoadCavnas() {
+
+  public reloadCanvas() {
     this.canvas.clear();
     this.xAxis = 50;
     this.yAxis = 40;
@@ -86,8 +95,8 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  public changeCordinates(isInArray: boolean) {
-    if(isInArray === true) {
+  public changeCoordinates(isInArray: boolean) {
+    if(isInArray) {
       this.yAxis = this.yAxis + 50;
       return;
     }
@@ -95,147 +104,63 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public convertJsonToSVG() {
-    let startOjbectIndent = false;
-    let arrayIndex = 0;
-    let isInArray = false
-    for (let item of this.json) {
-      if (item.Key == true && item.Text) {
-        if (startOjbectIndent == true) {
-          this.yAxis = this.yAxis + 50;
-          this.xAxis = this.xAxis + 50;
-          this.addSvgKeyToCanvas(item.Text, arrayIndex)
-        }
-        this.addSvgKeyToCanvas(item.Text, arrayIndex)
-      }
-      else if (item.Key == false && item.Text) {
-        this.changeCordinates(isInArray);
-        this.addSvgValueToCanvas(item.Text, arrayIndex)
-      }
-      else if (item.Key == false && item.Number) {
-        this.changeCordinates(isInArray);
-        this.addSvgValueNumberToCanvas(item.Number, arrayIndex)
-      }
-      else if (item.KeyLink == true) {
-        this.createColonSvgLink(arrayIndex)
-      }
-      else if (item.Array == 'start') {
-        isInArray = true;
-        if(startOjbectIndent == true){
-          this.changeCordinates(false);
-        }
-        this.createSymbol('[', arrayIndex, 'array');
-        if (this.xAxis && arrayIndex) {
-          let objStartAndEnd = { x: this.xAxis, y: this.yAxis, x2: 0, y2: 0, startIndex: arrayIndex, endIndex: 0 };
-          this.objectXaxisTracker.push(objStartAndEnd);
-        }
-        this.xAxis = this.xAxis + 50;
-      }
-      else if (item.Array == 'end') {
-        isInArray = false;
-        let x = this.objectXaxisTracker.pop();
-        this.yAxis = this.yAxis + 50;
-        this.xAxis = this.xAxis - 50;
-        this.createSymbol(']', arrayIndex, 'array')
-        if (x) {
-          // move down complimentary symbol group
-          let complimentarySymbolGroup = SVG('#symbolGroup' + x.startIndex);
+    let startObjectIndent = false;
+    let isInArray = false;
 
-          complimentarySymbolGroup.x(this.xAxis)
-          
-          x.endIndex = arrayIndex;
-          
-          let val = SVG('#value' + (arrayIndex - 1));
-          if (val) {
-            let valBbox = val.bbox()
-            x.x2 = valBbox.x2
-            x.y2 = valBbox.y2
-          }
-          let numVal = SVG('#valueNumber' + (arrayIndex - 1));
-          if (numVal) {
-            let valBbox = numVal.bbox()
-            x.x2 = valBbox.x2
-            x.y2 = valBbox.y2
-          } 
-          if(!val && !numVal) {
-            // found path for wrapping object
-            let previousObject = SVG('#path' + (arrayIndex - 1));
-            x.x2 = previousObject.bbox().x2;
-            x.y2 = previousObject.bbox().y2;
-            
-            let previousSymbol = SVG('#symbolGroup' + arrayIndex);
-            previousSymbol.x(previousObject.bbox().x2 + 30)
-          }
-          arrayIndex++;
-          this.createPathForWrappingObject(arrayIndex, x, '#FB94B5');
-          //#FB94B5
-        }
+    for (let item of this.json) {
+      const strategy = this.selectStrategy(item);
+      strategy.execute(item, this, isInArray, startObjectIndent);
+
+      // Update the state variables based on the current item
+      if (item.Array === 'start') {
+        isInArray = true;
+      } else if (item.Array === 'end') {
+        isInArray = false;
       }
-      else if (item.Object == 'start') {
-        this.xAxis = this.xAxis + 100;
-        this.createSymbol('{', arrayIndex, 'object');
-        if (this.xAxis && arrayIndex) {
-          let objStartAndEnd = { x: this.xAxis, y: this.yAxis, x2: 0, y2: 0, startIndex: arrayIndex, endIndex: 0 };
-          this.objectXaxisTracker.push(objStartAndEnd);
-        }
-      }
-      else if (item.Object == 'end') {
-        let x = this.objectXaxisTracker.pop();
-        this.xAxis = this.heightAndWidthForValueTracker[0].x
-        this.createSymbol('}', arrayIndex, 'object');
-        if (x) {
-          // move down complimentary symbol group
-          let complimentarySymbolGroup = SVG('#symbolGroup' + x.startIndex);
-          complimentarySymbolGroup.y(this.yAxis - 15)
-          
-          x.endIndex = arrayIndex;
-          
-          let val = SVG('#value' + (arrayIndex - 1));
-          if (val) {
-            let valBbox = val.bbox()
-            x.x2 = valBbox.x2
-            x.y2 = valBbox.y2
-          }
-          let numVal = SVG('#valueNumber' + (arrayIndex - 1));
-          if (numVal) {
-            let valBbox = numVal.bbox()
-            x.x2 = valBbox.x2
-            x.y2 = valBbox.y2
-          } 
-          if(!val) {
-            // found path for wrapping object
-            let previousObject = SVG('#path' + (arrayIndex - 1));
-            x.x2 = previousObject.bbox().x2;
-            x.y2 = previousObject.bbox().y2;
-            
-            let previousSymbol = SVG('#symbolGroup' + arrayIndex);
-            previousSymbol.x(previousObject.bbox().x2 + 30)
-          }
-          arrayIndex++;
-          this.createPathForWrappingObject(arrayIndex, x, '#D2B48C');
-          //#FB94B5
-        }
-      }
-      startOjbectIndent = true;
-      arrayIndex++;
+
+      startObjectIndent = true;
+      this.arrayIndex++;
     }
   }
 
-  public extractHighestXaxisOfValueInObject(lowerBound: number, upperBound: number) {
-    //query canvas for values between start and end index
-    // search for dom all values that start with vlaue    
-    let values = SVG('.value');
-    // for(let val of values){
+  private selectStrategy(item: JsonMapperModel): JsonItemDrawingStrategy {
+    if (item.Key && item.Text) return new KeyTextStrategy();
+    if (!item.Key && item.Text) return new ValueTextStrategy();
+    if (!item.Key && item.Number) return new ValueNumberStrategy();
+    if (item.KeyLink) return new KeyLinkStrategy();
+    if (item.Array === 'start') return new ArrayStartStrategy();
+    if (item.Array === 'end') return new ArrayEndStrategy();
+    if (item.Object === 'start') return new ObjectStartStrategy();
+    if (item.Object === 'end') return new ObjectEndStrategy();
 
-    // }
-    //console.warn(values)
-    return values.bbox().x2;
+    throw new Error('Unsupported item type');
   }
-  public extractHighestYaxisOfValueInObject(lowerBound: number, upperBound: number) {
-    //query canvas for values between start and end index
-    // search for dom all values that start with vlaue
-    let values = this.canvas.find('.key');
-    //console.table(values)
-    return values
+
+  public adjustBbox(x: { x: number; y: number; x2: number; y2: number; startIndex: number; endIndex: number }, context: JsonCanvasComponent) {
+    x.endIndex = context.arrayIndex;
+
+    let val = SVG('#value' + (context.arrayIndex - 1));
+    if (val) {
+      let valBbox = val.bbox()
+      x.x2 = valBbox.x2
+      x.y2 = valBbox.y2
+    }
+    let numVal = SVG('#valueNumber' + (context.arrayIndex - 1));
+    if (numVal) {
+      let valBbox = numVal.bbox()
+      x.x2 = valBbox.x2
+      x.y2 = valBbox.y2
+    }
+    return {val, numVal};
+  }
+
+  public wrapInSVGPath(context: JsonCanvasComponent, x: { x: number; y: number; x2: number; y2: number; startIndex: number; endIndex: number }) {
+    let previousObject = SVG('#path' + (context.arrayIndex - 1));
+    x.x2 = previousObject.bbox().x2;
+    x.y2 = previousObject.bbox().y2;
+
+    let previousSymbol = SVG('#symbolGroup' + context.arrayIndex);
+    previousSymbol.x(previousObject.bbox().x2 + 30)
   }
 
   public addSvgKeyToCanvas(value: string, int: number) {
@@ -313,16 +238,16 @@ export class JsonCanvasComponent implements OnInit, OnDestroy, AfterViewInit {
     line.back();
   }
 
-  public createPathForWrappingObject(int: number, pathData: { x: number, y: number, x2: number, y2: number}, color: string) {
+  public createPathForWrappingObject(pathData: { x: number, y: number, x2: number, y2: number}, color: string) {
     let path = this.canvas.path(
       `
-      M ${pathData.x} ${pathData.y} 
-      H ${pathData.x2 + 50} 
-      V ${pathData.y2 + 50} 
-      H ${pathData.x} 
+      M ${pathData.x} ${pathData.y}
+      H ${pathData.x2 + 50}
+      V ${pathData.y2 + 50}
+      H ${pathData.x}
       Z
       `
-    ).fill({ color: color }).id('path' + int).opacity(0.3);
+    ).fill({ color: color }).id('path' + this.arrayIndex).opacity(0.3);
     path.back();
   }
 
