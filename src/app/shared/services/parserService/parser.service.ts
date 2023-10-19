@@ -1,186 +1,183 @@
 import { Injectable } from '@angular/core';
 import { JsonMapperModel } from '../../models/JsonMapperModel';
+import {TreeNode} from "../../interfaces/treeNode";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ParserService {
   public jsonModel: Array<JsonMapperModel> = [];
-  private levelIndex = 0;
-  private groupIndex = 0;
-  private highestIndex = 0;
-  private arrayStart: JsonMapperModel = { Array: 'start', Key: false }
-  private endStart: JsonMapperModel = { Array: 'end', Key: false }
-  private objectStart: JsonMapperModel = { Object: 'start', Key: false }
-  private objectEnd: JsonMapperModel = { Object: 'end', Key: false }
-  private emtpyTile: JsonMapperModel = { Text: ' ', Symbol: true, Key: false }
-  private keySeperator: JsonMapperModel = { Symbol: true, Key: false, KeyLink: true }
-  private highestNestedValue = 0;
   public fileContent: string = '';
   public fileTitle = '';
+  public rootNode: TreeNode | null = null;
+
   constructor() { }
 
   public clearContent() {
     this.jsonModel = [];
     this.fileContent = '';
-    this.levelIndex = 0;
-    this.groupIndex = 0;
-    this.highestIndex = 0;
-    this.highestNestedValue = 0;
   }
 
-  public parseJson() {
+  public parseJson(): void {
     try {
-      let readyFormatt = JSON.parse(this.fileContent);
-      this.startJsonParse(readyFormatt);
+      let readyFormat = JSON.parse(this.fileContent);
+      this.rootNode = this.startJsonParse(readyFormat); // Store the root node here
+      console.warn(readyFormat);
+      this.jsonModel = this.translateTreeToModel(this.rootNode);
       console.table(this.jsonModel);
     } catch (error) {
       console.log(error);
     }
   }
+  private startJsonParse(data: any): TreeNode {
+    let rootNode: TreeNode = { data: { IsKey: false, DataType: 'Value' }, children: [] };
 
-  private dealWithOjbect(data: any) {
-    for (let prop in data) {
-      //start by pushing the key to array
-      let keyitem: JsonMapperModel = Object();
-      keyitem.Key = true;
-      keyitem.Text = prop;
-      this.jsonModel.push(keyitem);
-      this.jsonModel.push(this.keySeperator)
-      //let valueitem: JsonMapperModel = Object();
-      // check if value is array
-      if (Array.isArray(data[prop])) {
-        this.jsonModel.push(this.arrayStart);
-        this.dealWithArray(data[prop])
-        this.jsonModel.push(this.endStart);
-      }
-      else if (data[prop] instanceof Object) {
-        this.jsonModel.push(this.objectStart)
-        this.dealWithOjbect(data[prop])
-        this.jsonModel.push(this.objectEnd)
-        //this.jsonModel.push(this.emtpyTile)
-
-      }
-      // lastly should be a value type
-      else {
-        let valueItem: JsonMapperModel = Object();
-        valueItem.Key = false;
-        this.determineValueType(data[prop], valueItem);
-        //valueItem.Text = data[prop];        
-        this.jsonModel.push(valueItem);
-        //this.jsonModel.push(this.emtpyTile)
-      }
-    }
-  }
-
-  private dealWithArray(data: any) {
-    //item.Value = [];
-    const jsonLength = data.length;
-    const jsonArray = data;
-    for (let i = 0; i < jsonLength; i++) {
-      let itemToBeParsed = jsonArray[i]
-      // check for nested arrays
-      if (Array.isArray(itemToBeParsed)) {
-        this.jsonModel.push(this.arrayStart);
-        this.dealWithArray(itemToBeParsed)
-        this.jsonModel.push(this.endStart);
-      }
-      // check for array of Objects
-      else if (itemToBeParsed instanceof Object) {
-        this.jsonModel.push(this.objectStart)
-        this.dealWithOjbect(itemToBeParsed)
-        this.jsonModel.push(this.objectEnd)
-      }
-      else {
-        let arrayItem: JsonMapperModel = Object();
-        arrayItem.Key = false;
-        //arrayItem.Text = itemToBeParsed;
-        this.determineValueType(itemToBeParsed, arrayItem);
-        this.jsonModel.push(arrayItem);
-      }
-    }
-  }
-
-  /**
-   * Needed a clear starting point for now maybe in future this will be refactored 
-   * @param data json to parse
-   */
-  private startJsonParse(data: any) {
-    // if json starts with an Array
     if (Array.isArray(data)) {
-      this.jsonModel.push(this.arrayStart);
-      this.dealWithArray(data);
-      this.jsonModel.push(this.endStart);
-    }
-    else {
-      for (let type in data) {
-        let item: JsonMapperModel = Object();
-        item.Key = true;
-        item.Text = type;
-
-        this.jsonModel.push(item);
-        this.jsonModel.push(this.keySeperator)
-        // if json is an array 
-        if (Array.isArray(data[type])) {
-          this.jsonModel.push(this.arrayStart);
-
-          // let emptTile = Object.assign({}, this.emtpyTile);
-          // emptTile.Cols = 12;
-          // this.jsonModel.push(emptTile)
-          this.dealWithArray(data[type])
-          this.jsonModel.push(this.endStart);
-        }
-        else if (data[type] instanceof Object && !data[type].length) {
-          this.jsonModel.push(this.objectStart)
-          this.dealWithOjbect(data[type])
-          this.jsonModel.push(this.objectEnd)
-        }
-        else {
-          let valueItem: JsonMapperModel = Object();
-          valueItem.Key = false;
-          this.determineValueType(data[type], valueItem);
-          //valueItem.Text = data[type];
-          this.jsonModel.push(valueItem);
-
-        }
-      }
-      this.whiteSpaceCalculation(this.jsonModel);
+      this.processArrayData(data, rootNode);
+    } else {
+      this.processObjectData(data, rootNode);
     }
 
+    return rootNode;
   }
+
+  private processArrayData(data: any[], rootNode: TreeNode): void {
+    rootNode.data.DataType = 'ArrayStart';
+    rootNode.children.push(this.parseNode(data));
+    rootNode.children.push({ data: { DataType: 'ArrayEnd' }, children: [] });
+  }
+
+  private processObjectData(data: Object, rootNode: TreeNode): void {
+    rootNode.data.DataType = 'ObjectStart';
+
+    for (let type in data) {
+      this.addKeyToRoot(type, rootNode);
+      this.addValueToRoot((data as any)[type], rootNode);
+    }
+
+    rootNode.children.push({ data: { DataType: 'ObjectEnd' }, children: [] });
+  }
+
+  private addKeyToRoot(type: string, rootNode: TreeNode): void {
+    let keyNode: TreeNode = {
+      data: {
+        IsKey: true,
+        DataType: 'Value',
+        Value: type
+      },
+      children: []
+    };
+    rootNode.children.push(keyNode);
+  }
+
+  private addValueToRoot(value: any, rootNode: TreeNode): void {
+    let valueNode: TreeNode = this.parseNode(value);
+    rootNode.children.push(valueNode);
+  }
+
+
+  private parseNode(data: any): TreeNode {
+    let node: TreeNode = { data: { IsKey: false }, children: [] };
+
+    if (Array.isArray(data)) {
+      node.data.DataType = 'ArrayStart';
+      for (let item of data) {
+        node.children.push(this.parseNode(item));
+      }
+      node.children.push({ data: { DataType: 'ArrayEnd' }, children: [] });
+    } else if (typeof data === 'object' && data !== null) {
+      node.data.DataType = 'ObjectStart';
+      for (let key in data) {
+        // Create a child node for the key
+        let keyNode: TreeNode = {
+          data: {
+            IsKey: true,
+            DataType: 'Value',
+            Value: key
+          },
+          children: []
+        };
+        node.children.push(keyNode);
+
+        // Create a child node for the value associated with the key
+        let valueNode = this.parseNode(data[key]);
+        node.children.push(valueNode);
+      }
+      node.children.push({ data: { DataType: 'ObjectEnd' }, children: [] });
+    } else {
+      this.determineValueType(data, node.data);
+    }
+
+    return node;
+  }
+
 
   private determineValueType(value: any, valueItem: JsonMapperModel): void {
     if (typeof value === 'boolean') {
-      value = value as boolean || undefined;
-      valueItem.Boolean = value;
-    }
-    else if (typeof value === 'string') {
-      value = value as string || undefined;
-      valueItem.Text = value;
-    }
-    else if (typeof value === 'number') {
-      value = value as number || undefined;
-      valueItem.Number = value;
-    }
-    else if (value == null) {
-      valueItem.NullValue = true;
+      valueItem.Value = value;
+    } else if (typeof value === 'string') {
+      valueItem.Value = value;
+    } else if (typeof value === 'number') {
+      valueItem.Value = value;
+    } else if (value === null) {
+      valueItem.Value = null;
     }
   }
 
 
+  private translateTreeToModel(treeNode: TreeNode): JsonMapperModel[] {
+    switch (treeNode.data.DataType) {
+      case 'ArrayStart':
+        return this.processArray(treeNode);
+      case 'ObjectStart':
+        return this.processObject(treeNode);
+      default:
+        return [treeNode.data];
+    }
+  }
 
-  private whiteSpaceCalculation(jsonData: JsonMapperModel[]) {
-    let symbolArray = jsonData.filter(x => x.Array == 'start' || x.Array == 'end' || x.Object == 'start' || x.Object == 'end')
-    let highestLevel = 0
-    let index = 0
-    for (let symb of symbolArray) {
-      if (symb.Array == 'start' || symb.Object == 'start') {
-        index++
-        highestLevel = index > highestLevel ? index : highestLevel
+  private processArray(treeNode: TreeNode): JsonMapperModel[] {
+    const arrayContent = treeNode.children.flatMap(child => this.translateTreeToModel(child));
+    return [{ DataType: 'ArrayStart' }, ...arrayContent, { DataType: 'ArrayEnd' }];
+  }
+
+  private processObject(treeNode: TreeNode): JsonMapperModel[] {
+    const objectContent: JsonMapperModel[] = [];
+
+    let isNextChildValue = false;
+    treeNode.children.forEach((child, index) => {
+      if (child.data.IsKey) {
+        objectContent.push({ Value: child.data.Value, IsKey: true, DataType: 'Value' });
+        isNextChildValue = true;
+      } else if (isNextChildValue) {
+        objectContent.push(...this.translateTreeToModel(child));
+        isNextChildValue = false;
       }
-      if (symb.Array == 'end' || symb.Object == 'end') {
-        index--
+    });
+
+    return [{ DataType: 'ObjectStart' }, ...objectContent, { DataType: 'ObjectEnd' }];
+  }
+
+
+  public bfsTraversal(root: TreeNode, callback: (node: TreeNode) => void): void {
+    let queue: TreeNode[] = [root];
+
+    while (queue.length > 0) {
+      let currentNode = queue.shift()!;
+
+      callback(currentNode);
+
+      for (let child of currentNode.children) {
+        queue.push(child);
       }
+    }
+  }
+
+  public dfsTraversal(node: TreeNode, callback: (node: TreeNode) => void): void {
+    callback(node);
+
+    for (let child of node.children) {
+      this.dfsTraversal(child, callback);
     }
   }
 }
