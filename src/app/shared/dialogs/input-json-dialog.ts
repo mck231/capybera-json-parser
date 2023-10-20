@@ -9,7 +9,7 @@ import { ValidjsonService } from "../services/validjson.service";
   template: `
   <h1 mat-dialog-title>Data will be lost</h1>
   <!-- <div mat-dialog-content>
-      <p>Do you wish to continue?</p>      
+      <p>Do you wish to continue?</p>
   </div> -->
   <div mat-dialog-actions>
       <button mat-flat-button color="accent" (click)="dialogRef.close()"> Cancel </button>
@@ -21,12 +21,12 @@ import { ValidjsonService } from "../services/validjson.service";
     constructor(
       public dialogRef: MatDialogRef<InputJsonDialog>,
       public isValidService: ValidjsonService,
-      public paserService: ParserService
+      public parserService: ParserService
     ) {}
-  
+
     onNoClick(): void {
       this.isValidService.changeIfValid(false);
-      this.paserService.clearContent();
+      this.parserService.clearContent();
       this.dialogRef.close();
     }
   }

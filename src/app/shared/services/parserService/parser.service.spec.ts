@@ -21,7 +21,7 @@ describe('ParserService', () => {
     expect(service.jsonModel[2].Text).toBe('hi');
     expect(service.jsonModel[0].Text).toBe('events');
   });
-  
+
   it('should parse nested objects', () => {
     service.fileContent = fakeJsonWithObject;
     service.parseJson();
@@ -47,6 +47,42 @@ describe('ParserService', () => {
     service.parseJson();
     expect(service.jsonModel.length > 0).toBeTruthy();
   });
+  it('should parse nested arrays', () => {
+    service.fileContent = fakeJsonWithNestedArray;
+    service.parseJson();
+    console.log(service.jsonModel); // Inspect the jsonModel structure and content
+
+    expect(service.jsonModel.length > 0).toBeTruthy();
+    expect(service.jsonModel[4].Number).toEqual(1);
+    expect(service.jsonModel[5].Number).toEqual(2);
+  });
+
+  it('should parse json with boolean values', () => {
+    service.fileContent = fakeJsonWithBoolean;
+    service.parseJson();
+    expect(service.jsonModel.length > 0).toBeTruthy();
+    expect(service.jsonModel[2].Boolean).toBeTruthy();
+  });
+
+  it('should parse json with null values', () => {
+    service.fileContent = fakeJsonWithNull;
+    service.parseJson();
+    expect(service.jsonModel.length > 0).toBeTruthy();
+    expect(service.jsonModel[2].NullValue).toBeTruthy();
+  });
+
+  it('should handle empty json', () => {
+    service.fileContent = emptyJson;
+    service.parseJson();
+    expect(service.jsonModel).toHaveSize(0);
+  });
+
+  it('should clear content', () => {
+    service.fileContent = fakeJson;
+    service.clearContent();
+    expect(service.fileContent).toBe('');
+    expect(service.jsonModel).toHaveSize(0);
+  });
 });
 
 const fakeJson = `{
@@ -69,3 +105,16 @@ const notFormatedCorrectlyJson = `{
 const fakeComplicatedJson = `{
   "events": [ {"test": 3}, {"test": "8L"}, {"test": true} ]
 }`;
+const fakeJsonWithNestedArray = `{
+  "events": [ [1,2], [3,4] ]
+}`;
+
+const fakeJsonWithBoolean = `{
+  "events": true
+}`;
+
+const fakeJsonWithNull = `{
+  "events": null
+}`;
+
+const emptyJson = `{}`;

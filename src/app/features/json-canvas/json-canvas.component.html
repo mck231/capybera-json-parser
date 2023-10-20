@@ -22,12 +22,12 @@
             </button>
         </div>
         <div class="redo-button">
-            <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false"
+            <button mat-flat-button *ngIf="(drawer._animationState == 'void' && isMobile) || !isMobile"
                 color="primary" (click)="realoadCavnas()"> redo </button>
             <button mat-mini-fab color="primary" (click)="viewLegend()" aria-label="Button to see legend for the canvas">
                 <mat-icon>map</mat-icon>
             </button>
-            <h2 *ngIf="(drawer._animationState == 'void' && isMobile == true) || isMobile == false"> {{fileTitle}} </h2>
+            <h2 *ngIf="(drawer._animationState == 'void' && isMobile) || !isMobile"> {{fileTitle}} </h2>
         </div>
         <div id="canvas" class="canvas"></div>
     </mat-sidenav-content>

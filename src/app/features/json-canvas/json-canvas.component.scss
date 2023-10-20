@@ -9,7 +9,7 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
     background-color: mat.get-color-from-palette($my-palette, 100);
 }
 .example-container{
-    background-color: #e5e4e2 
+    background-color: #e5e4e2
 }
 .sidenav-toggle {
     display: flex;
@@ -38,6 +38,8 @@ $my-second-pallette: mat.define-palette(mat.$cyan-palette);
     border-bottom: 1px solid mat.get-color-from-palette($my-second-pallette, 900);
     width: 1200px;
     height:700px;
+    overflow-x: auto;
+    overflow-y: auto;
 }
 .nav{
     display: flex;
